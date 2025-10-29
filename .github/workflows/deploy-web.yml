@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
 
       - name: Install dependencies
         run: |
@@ -25,8 +26,9 @@ jobs:
       - name: Export web
         env:
           EXPO_NO_TELEMETRY: 1
+          NODE_ENV: production
         run: |
-          npx expo export:web --no-pwa --output web-build
+          npx expo export:web --output-dir web-build
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
@@ -34,3 +36,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web-build
           publish_branch: gh-pages
+          cname: false
