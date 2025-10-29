@@ -63,14 +63,56 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
         setHue(newHue);
         updateColor(newHue, saturation, brightness);
       },
+      onPanResponderRelease: (evt, gestureState) => {
+        const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
+        const rgb = hsbToRgb(newHue, saturation / 100, brightness / 100);
+        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+        handleColorSelect(hex);
+      },
     })
   ).current;
 
-  const updateColor = async (h, s, b) => {
+  const saturationSliderPan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        setSaturation(newSaturation);
+        updateColor(hue, newSaturation, brightness);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        const rgb = hsbToRgb(hue, newSaturation / 100, brightness / 100);
+        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+        handleColorSelect(hex);
+      },
+    })
+  ).current;
+
+  const brightnessSliderPan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        setBrightness(newBrightness);
+        updateColor(hue, saturation, newBrightness);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        const rgb = hsbToRgb(hue, saturation, newBrightness / 100);
+        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+        handleColorSelect(hex);
+      },
+    })
+  ).current;
+
+  const updateColor = (h, s, b) => {
     // Convert HSB to RGB
     const rgb = hsbToRgb(h, s / 100, b / 100);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-    await handleColorSelect(hex);
+    onColorChange(hex);
   };
 
   const hsbToRgb = (h, s, b) => {
@@ -200,7 +242,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
           {/* Saturation Slider */}
           <View style={styles.sliderContainer}>
             <Text style={styles.sliderLabel}>Saturation</Text>
-            <View style={styles.slider}>
+            <View style={styles.slider} {...saturationSliderPan.panHandlers}>
               <LinearGradient
                 colors={['#808080', currentColor]}
                 start={{ x: 0, y: 0 }}
@@ -219,7 +261,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
           {/* Brightness Slider */}
           <View style={styles.sliderContainer}>
             <Text style={styles.sliderLabel}>Brightness</Text>
-            <View style={styles.slider}>
+            <View style={styles.slider} {...brightnessSliderPan.panHandlers}>
               <LinearGradient
                 colors={['#000000', currentColor]}
                 start={{ x: 0, y: 0 }}
