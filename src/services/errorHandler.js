@@ -48,6 +48,8 @@ class ErrorHandler {
   constructor() {
     this.errorLog = [];
     this.maxLogSize = 100;
+    this.retryAttempts = new Map();
+    this.maxRetries = 3;
   }
 
   /**
@@ -224,6 +226,72 @@ class ErrorHandler {
    */
   exportErrorLog() {
     return JSON.stringify(this.errorLog, null, 2);
+  }
+
+  /**
+   * Retry failed operation with exponential backoff
+   */
+  async retryOperation(operationKey, operation, options = {}) {
+    const {
+      maxRetries = this.maxRetries,
+      delayMs = 1000,
+      exponentialBackoff = true,
+    } = options;
+
+    let attempts = this.retryAttempts.get(operationKey) || 0;
+
+    while (attempts < maxRetries) {
+      try {
+        const result = await operation();
+        this.retryAttempts.delete(operationKey);
+        return { success: true, result };
+      } catch (error) {
+        attempts++;
+        this.retryAttempts.set(operationKey, attempts);
+
+        if (attempts >= maxRetries) {
+          this.retryAttempts.delete(operationKey);
+          this.logError(error);
+          return { success: false, error };
+        }
+
+        // Wait before retry with exponential backoff
+        const delay = exponentialBackoff ? delayMs * Math.pow(2, attempts - 1) : delayMs;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  /**
+   * Check if error is recoverable
+   */
+  isRecoverable(error) {
+    if (!error) return false;
+
+    const recoverableTypes = [
+      ERROR_TYPES.NETWORK,
+      ERROR_TYPES.SERVER,
+    ];
+
+    return recoverableTypes.includes(error.type);
+  }
+
+  /**
+   * Get error statistics
+   */
+  getStatistics() {
+    const stats = {
+      total: this.errorLog.length,
+      byType: {},
+      recentErrors: this.errorLog.slice(-10),
+    };
+
+    this.errorLog.forEach(error => {
+      const type = error.type || 'unknown';
+      stats.byType[type] = (stats.byType[type] || 0) + 1;
+    });
+
+    return stats;
   }
 }
 
