@@ -61,10 +61,21 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
       onPanResponderMove: (evt, gestureState) => {
         const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
         setHue(newHue);
+        updateColorPreview(newHue, saturation, brightness);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
         updateColor(newHue, saturation, brightness);
       },
     })
   ).current;
+
+  const updateColorPreview = (h, s, b) => {
+    // Convert HSB to RGB
+    const rgb = hsbToRgb(h, s / 100, b / 100);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    onColorChange(hex);
+  };
 
   const updateColor = async (h, s, b) => {
     // Convert HSB to RGB
