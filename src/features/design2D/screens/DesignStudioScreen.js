@@ -27,11 +27,13 @@ import {
 import ColorPicker from '../../../components/ColorPicker';
 import FabricSelector from '../../../components/FabricSelector';
 import PatternSelector from '../../../components/PatternSelector';
+import DesignTips from '../../../components/DesignTips';
 
 // Import new features
 import { useDesignStore } from '../../../store';
 import exportService from '../../../services/exportService';
 import autoSaveService from '../../../services/autoSaveService';
+import useKeyboardShortcuts, { COMMON_SHORTCUTS } from '../../../hooks/useKeyboardShortcuts';
 
 const { width, height } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 40;
@@ -282,6 +284,7 @@ const DesignStudioScreen = ({ navigation }) => {
   const [showPatternSelector, setShowPatternSelector] = useState(false);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
   const [showTextInput, setShowTextInput] = useState(false);
+  const [showDesignTips, setShowDesignTips] = useState(false);
   const [textInput, setTextInput] = useState('');
   const [designElements, setDesignElements] = useState([]);
   const [layers, setLayers] = useState([
@@ -304,6 +307,23 @@ const DesignStudioScreen = ({ navigation }) => {
 
   // Undo/Redo functionality
   const { undo, redo, canUndo, canRedo, saveToHistory } = useDesignStore();
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    [COMMON_SHORTCUTS.UNDO]: handleUndo,
+    [COMMON_SHORTCUTS.REDO_WINDOWS]: handleRedo,
+    [COMMON_SHORTCUTS.REDO_MAC]: handleRedo,
+    [COMMON_SHORTCUTS.SAVE]: handleManualSave,
+    [COMMON_SHORTCUTS.TOGGLE_GRID]: () => setGridVisible(!gridVisible),
+    [COMMON_SHORTCUTS.ESCAPE]: () => {
+      setShowColorPicker(false);
+      setShowFabricSelector(false);
+      setShowPatternSelector(false);
+      setShowLayerPanel(false);
+      setShowTextInput(false);
+      setShowDesignTips(false);
+    },
+  });
 
   // Auto-save setup - Use ref to avoid stale closures
   const designStateRef = useRef({
@@ -563,6 +583,15 @@ const DesignStudioScreen = ({ navigation }) => {
     }
   };
 
+  const handleManualSave = async () => {
+    try {
+      await autoSaveService.save();
+      Alert.alert('Success', 'Design saved successfully!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to save design');
+    }
+  };
+
   const toggle3DView = () => {
     setCanvasMode(canvasMode === '2D' ? '3D' : '2D');
     if (canvasMode === '2D') {
@@ -720,6 +749,13 @@ const DesignStudioScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.toolbarButton} onPress={saveDesign}>
             <Feather name="save" size={20} color="#fff" />
             <Text style={styles.toolbarButtonText}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.toolbarButton} 
+            onPress={() => setShowDesignTips(true)}
+          >
+            <MaterialCommunityIcons name="lightbulb-on" size={20} color="#FFD93D" />
+            <Text style={styles.toolbarButtonText}>Tips</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.toolbarButton} onPress={exportDesign}>
             <Feather name="download" size={20} color="#fff" />
@@ -957,6 +993,13 @@ const DesignStudioScreen = ({ navigation }) => {
           </View>
         </BlurView>
       </Modal>
+
+      {/* Design Tips Modal */}
+      <DesignTips
+        visible={showDesignTips}
+        onClose={() => setShowDesignTips(false)}
+        context={activeTool === 'color' ? 'color' : 'general'}
+      />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import colorHistoryService from '../services/colorHistoryService';
 
 const { width } = Dimensions.get('window');
 
@@ -19,6 +20,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [brightness, setBrightness] = useState(100);
+  const [recentColors, setRecentColors] = useState([]);
 
   const presetColors = [
     ['#FF6B6B', '#4ECDC4', '#6C63FF', '#FFD93D', '#A8E6CF'],
@@ -36,6 +38,22 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
     { colors: ['#C7CEEA', '#B2E1D4'], name: 'Pastel' },
   ];
 
+  // Load recent colors from history on mount
+  useEffect(() => {
+    loadRecentColors();
+  }, []);
+
+  const loadRecentColors = async () => {
+    const colors = await colorHistoryService.getRecentColors(10);
+    setRecentColors(colors);
+  };
+
+  const handleColorSelect = async (color) => {
+    onColorChange(color);
+    await colorHistoryService.addColor(color);
+    await loadRecentColors();
+  };
+
   const hueSliderPan = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -48,11 +66,11 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
     })
   ).current;
 
-  const updateColor = (h, s, b) => {
+  const updateColor = async (h, s, b) => {
     // Convert HSB to RGB
     const rgb = hsbToRgb(h, s / 100, b / 100);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-    onColorChange(hex);
+    await handleColorSelect(hex);
   };
 
   const hsbToRgb = (h, s, b) => {
@@ -137,7 +155,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
                 <TouchableOpacity
                   key={color}
                   style={[styles.colorSwatch, { backgroundColor: color }]}
-                  onPress={() => onColorChange(color)}
+                  onPress={() => handleColorSelect(color)}
                 >
                   {currentColor === color && (
                     <MaterialCommunityIcons name="check" size={20} color="#fff" />
@@ -226,7 +244,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
             <TouchableOpacity
               key={index}
               style={styles.gradientOption}
-              onPress={() => onColorChange(gradient.colors[0])}
+              onPress={() => handleColorSelect(gradient.colors[0])}
             >
               <LinearGradient
                 colors={gradient.colors}
@@ -244,13 +262,21 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
       <View style={styles.recentContainer}>
         <Text style={styles.recentLabel}>Recent Colors</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {['#6C63FF', '#FF6B6B', '#4ECDC4', '#FFD93D', '#A8E6CF'].map((color) => (
-            <TouchableOpacity
-              key={color}
-              style={[styles.recentColor, { backgroundColor: color }]}
-              onPress={() => onColorChange(color)}
-            />
-          ))}
+          {recentColors.length > 0 ? (
+            recentColors.map((color, index) => (
+              <TouchableOpacity
+                key={`${color}-${index}`}
+                style={[styles.recentColor, { backgroundColor: color }]}
+                onPress={() => handleColorSelect(color)}
+              >
+                {currentColor === color && (
+                  <MaterialCommunityIcons name="check" size={16} color="#fff" />
+                )}
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>No recent colors yet</Text>
+          )}
         </ScrollView>
       </View>
     </View>
@@ -404,6 +430,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 2,
     borderColor: '#2A2A3E',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#666',
+    fontSize: 12,
+    fontStyle: 'italic',
   },
 });
 

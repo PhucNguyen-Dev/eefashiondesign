@@ -18,7 +18,9 @@ class SocialService {
       const data = await AsyncStorage.getItem(this.STORAGE_KEY);
       return data ? JSON.parse(data) : this.getInitialData();
     } catch (error) {
-      console.error('Failed to load social data:', error);
+      if (__DEV__) {
+        console.error('Failed to load social data:', error);
+      }
       return this.getInitialData();
     }
   }
@@ -400,7 +402,9 @@ class SocialService {
         status: 'pending',
       };
 
-      console.log('[SocialService] Content reported:', report);
+      if (__DEV__) {
+        console.log('[SocialService] Content reported:', report);
+      }
       return { success: true, report };
     } catch (error) {
       errorHandler.handleError(error);
