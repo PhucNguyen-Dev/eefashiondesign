@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "eefashionita",
+    "slug": "eefashionita",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/favicon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/favicon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1d2e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eefashionita.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/favicon.png",
+        "backgroundColor": "#1a1d2e"
+      },
+      "package": "com.eefashionita.app"
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [],
+    "extra": {
+      "eas": {
+        "projectId": "0e170ccd-cfa2-4677-a835-2b848a706977"
+      }
+    },
+    "owner": "edenemma"
+  }
+}
