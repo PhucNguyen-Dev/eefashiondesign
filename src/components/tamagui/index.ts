@@ -8,3 +8,5 @@ export { default as ColorPicker } from './ColorPicker';
 export { default as AuthInput } from './AuthInput';
 export { default as AuthContainer } from './AuthContainer';
 export { default as ThemeToggle } from './ThemeToggle';
+export { default as PremiumButton } from './PremiumButton';
+export { default as ErrorBoundary } from './ErrorBoundary';
