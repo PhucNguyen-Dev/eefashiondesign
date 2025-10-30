@@ -23,3 +23,4 @@ export { default as DesignTips } from './DesignTips';
 export { default as TutorialOverlay } from './TutorialOverlay';
 export { default as TemplateQuickPreview } from './TemplateQuickPreview';
 export { default as OnboardingScreen } from './OnboardingScreen';
+export { TamaguiProfileScreen } from './ProfileScreen';
