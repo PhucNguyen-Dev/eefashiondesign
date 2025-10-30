@@ -71,6 +71,8 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
 
   const updateColorPreview = (h, s, b) => {
     // Convert HSB to RGB
+  const updateColorPreview = (h, s, b) => {
+    // Convert HSB to RGB and update color preview without saving to history
     const rgb = hsbToRgb(h, s / 100, b / 100);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
     onColorChange(hex);

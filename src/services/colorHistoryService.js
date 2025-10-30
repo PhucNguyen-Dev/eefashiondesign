@@ -188,9 +188,9 @@ class ColorHistoryService {
    */
   generateComplementaryColors(hexColor) {
     // Convert hex to RGB
-    const r = parseInt(hexColor.substr(1, 2), 16);
-    const g = parseInt(hexColor.substr(3, 2), 16);
-    const b = parseInt(hexColor.substr(5, 2), 16);
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
 
     // Generate complementary color (opposite on color wheel)
     const complementary = `#${(255 - r).toString(16).padStart(2, '0')}${(255 - g).toString(16).padStart(2, '0')}${(255 - b).toString(16).padStart(2, '0')}`.toUpperCase();
@@ -206,15 +206,33 @@ class ColorHistoryService {
    * Rotate hue (simplified)
    */
   rotateHue(r, g, b, degrees) {
-    // Simple hue rotation algorithm
+    // Proper hue rotation algorithm using a 3x3 matrix
     const angle = (degrees / 360) * 2 * Math.PI;
-    const cos = Math.cos(angle);
-    const sin = Math.sin(angle);
+    const cosA = Math.cos(angle);
+    const sinA = Math.sin(angle);
 
-    const newR = Math.round(Math.max(0, Math.min(255, r * cos - g * sin)));
-    const newG = Math.round(Math.max(0, Math.min(255, r * sin + g * cos)));
-    const newB = b; // Keep blue channel
+    // Luminance coefficients for RGB
+    const lumR = 0.213;
+    const lumG = 0.715;
+    const lumB = 0.072;
 
+    // Build the rotation matrix
+    const m00 = lumR + cosA * (1 - lumR) + sinA * (-lumR);
+    const m01 = lumG + cosA * (-lumG) + sinA * (-lumG);
+    const m02 = lumB + cosA * (-lumB) + sinA * (1 - lumB);
+
+    const m10 = lumR + cosA * (-lumR) + sinA * 0.143;
+    const m11 = lumG + cosA * (1 - lumG) + sinA * 0.140;
+    const m12 = lumB + cosA * (-lumB) + sinA * (-0.283);
+
+    const m20 = lumR + cosA * (-lumR) + sinA * (-(1 - lumR));
+    const m21 = lumG + cosA * (-lumG) + sinA * (lumG);
+    const m22 = lumB + cosA * (1 - lumB) + sinA * (lumB);
+
+    // Apply the matrix to the RGB values
+    const newR = Math.round(Math.max(0, Math.min(255, r * m00 + g * m01 + b * m02)));
+    const newG = Math.round(Math.max(0, Math.min(255, r * m10 + g * m11 + b * m12)));
+    const newB = Math.round(Math.max(0, Math.min(255, r * m20 + g * m21 + b * m22)));
     return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`.toUpperCase();
   }
 }

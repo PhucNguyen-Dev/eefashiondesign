@@ -42,6 +42,9 @@ const useKeyboardShortcuts = (shortcuts = {}) => {
       return () => {
         document.removeEventListener('keydown', handleKeyPress);
       };
+    } else {
+      // Return a no-op cleanup function for non-web platforms
+      return () => {};
     }
   }, [handleKeyPress]);
 
