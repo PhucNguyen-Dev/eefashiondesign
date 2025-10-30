@@ -6,6 +6,7 @@
 import React from 'react';
 import ColorPickerTamagui from './tamagui/ColorPicker';
 
+const ColorPicker = ({ currentColor, onColorChange }) => {
   return (
     <ColorPickerTamagui
       currentColor={currentColor}

@@ -1,11 +1,15 @@
 import React, { useRef, useEffect } from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
-import { styled, XStack, YStack } from '@tamagui/core';
+import { styled, Stack } from '@tamagui/core';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '../../context/ThemeContext';
 import { Text as TamaguiText } from './Text';
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
 
 interface ThemeToggleProps {
   style?: any;

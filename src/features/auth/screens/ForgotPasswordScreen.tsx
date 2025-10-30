@@ -5,11 +5,18 @@
 
 import React, { useState } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-import { styled, YStack, XStack } from '@tamagui/core';
-import PropTypes from 'prop-types';
+import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../core/state/hooks/useAuth';
 import { AuthContainer, AuthInput, Button, ButtonText, Text as TamaguiText } from '../../../components/tamagui';
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
+
+interface ForgotPasswordScreenProps {
+  navigation: any;
+}
 
 // Styled components
 const BackButton = styled(TouchableOpacity, {
@@ -78,7 +85,7 @@ const ErrorText = styled(TamaguiText, {
   flex: 1,
 });
 
-const ForgotPasswordScreen = ({ navigation }) => {
+const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
   const { resetPassword, isLoading, error, clearError } = useAuth();
@@ -199,8 +206,5 @@ const ForgotPasswordScreen = ({ navigation }) => {
   );
 };
 
-ForgotPasswordScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
-};
 
 export default ForgotPasswordScreen;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { styled, Stack, XStack, YStack, Text as TamaguiText } from '@tamagui/core';
+import { styled, Stack, Text as TamaguiText } from '@tamagui/core';
 import { ScrollView, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,6 +7,10 @@ import { hsbToRgb, rgbToHex, hexToRgb, rgbToHsb } from '../../utils/helpers';
 import colorHistoryService from '../../services/colorHistoryService';
 
 const { width } = Dimensions.get('window');
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
 
 interface ColorPickerProps {
   currentColor?: string;
@@ -47,15 +51,13 @@ const Tab = styled(TouchableOpacity, {
 
 const TabText = styled(TamaguiText, {
   fontSize: 14,
-  color: '$textSecondary',
-  variants: {
-    active: {
-      true: {
-        color: '$primary',
-        fontWeight: 'bold',
-      },
-    },
-  } as any,
+  color: '#8E8E93',
+});
+
+const TabTextActive = styled(TamaguiText, {
+  fontSize: 14,
+  color: '#6C63FF',
+  fontWeight: 'bold',
 });
 
 const CurrentColorContainer = styled(XStack, {
@@ -206,16 +208,28 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       {(showAdvanced || showGradients) && (
         <TabContainer>
           <Tab onPress={() => setSelectedTab('palette')}>
-            <TabText active={selectedTab === 'palette'}>Palette</TabText>
+            {selectedTab === 'palette' ? (
+              <TabTextActive>Palette</TabTextActive>
+            ) : (
+              <TabText>Palette</TabText>
+            )}
           </Tab>
           {showAdvanced && (
             <Tab onPress={() => setSelectedTab('custom')}>
-              <TabText active={selectedTab === 'custom'}>Custom</TabText>
+              {selectedTab === 'custom' ? (
+                <TabTextActive>Custom</TabTextActive>
+              ) : (
+                <TabText>Custom</TabText>
+              )}
             </Tab>
           )}
           {showGradients && (
             <Tab onPress={() => setSelectedTab('gradient')}>
-              <TabText active={selectedTab === 'gradient'}>Gradient</TabText>
+              {selectedTab === 'gradient' ? (
+                <TabTextActive>Gradient</TabTextActive>
+              ) : (
+                <TabText>Gradient</TabText>
+              )}
             </Tab>
           )}
         </TabContainer>

@@ -10,11 +10,18 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import { styled, YStack, XStack } from '@tamagui/core';
-import PropTypes from "prop-types";
+import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../core/state/hooks/useAuth";
 import { AuthContainer, AuthInput, Button, ButtonText, Text as TamaguiText } from '../../../components/tamagui';
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
+
+interface SignUpScreenProps {
+  navigation: any;
+}
 
 // Styled components
 const ErrorContainer = styled(XStack, {
@@ -85,7 +92,7 @@ const LoginLinkText = styled(TamaguiText, {
   fontWeight: 'bold',
 });
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -284,8 +291,5 @@ const SignUpScreen = ({ navigation }) => {
   );
 };
 
-SignUpScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
-};
 
 export default SignUpScreen;

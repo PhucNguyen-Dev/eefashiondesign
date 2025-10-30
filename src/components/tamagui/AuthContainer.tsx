@@ -1,8 +1,11 @@
 import React from 'react';
-import { styled, YStack, Stack } from '@tamagui/core';
+import { styled, Stack } from '@tamagui/core';
 import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text as TamaguiText } from './Text';
 import { Ionicons } from '@expo/vector-icons';
+
+// Define YStack as Stack with column direction
+const YStack = styled(Stack, { flexDirection: 'column' });
 
 interface AuthContainerProps {
   children: React.ReactNode;
@@ -36,13 +39,13 @@ const IconContainer = styled(Stack, {
 const Title = styled(TamaguiText, {
   fontSize: 32,
   fontWeight: 'bold',
-  color: '$textPrimary',
+  color: '#FFFFFF',
   textAlign: 'center',
 });
 
 const Subtitle = styled(TamaguiText, {
   fontSize: 16,
-  color: '$textSecondary',
+  color: '#8E8E93',
   textAlign: 'center',
 });
 

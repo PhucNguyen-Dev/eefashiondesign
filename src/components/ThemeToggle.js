@@ -6,6 +6,7 @@
 import React from 'react';
 import ThemeToggleTamagui from './tamagui/ThemeToggle';
 
+const ThemeToggle = ({ style, showLabel = true }) => {
   return <ThemeToggleTamagui style={style} showLabel={showLabel} />;
 };
 

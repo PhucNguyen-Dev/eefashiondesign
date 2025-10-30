@@ -11,11 +11,18 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import { styled, YStack, XStack } from '@tamagui/core';
-import PropTypes from "prop-types";
+import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../core/state/hooks/useAuth";
 import { AuthContainer, AuthInput, Button, ButtonText, Text as TamaguiText } from '../../../components/tamagui';
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
+
+interface LoginScreenProps {
+  navigation: any;
+}
 
 // Styled components
 const ForgotPasswordLink = styled(TouchableOpacity, {
@@ -101,7 +108,7 @@ const SignUpLinkText = styled(TamaguiText, {
   fontWeight: 'bold',
 });
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn, isLoading, error, clearError, user, isAuthenticated } = useAuth();
@@ -250,8 +257,5 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-LoginScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
-};
 
 export default LoginScreen;

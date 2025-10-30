@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { styled, XStack, YStack } from '@tamagui/core';
+import { styled, Stack } from '@tamagui/core';
 import { TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
+// Define XStack and YStack
+const XStack = styled(Stack, { flexDirection: 'row' });
+const YStack = styled(Stack, { flexDirection: 'column' });
 
 interface AuthInputProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -42,12 +46,7 @@ const InputContainer = styled(XStack, {
   } as any,
 });
 
-const StyledTextInput = styled(TextInput, {
-  flex: 1,
-  fontSize: 16,
-  color: '$textPrimary',
-  outlineStyle: 'none',
-});
+// Can't use styled for TextInput, use inline styles instead
 
 const IconContainer = styled(XStack, {
   width: 24,
@@ -81,7 +80,8 @@ const AuthInput: React.FC<AuthInputProps> = ({
         <Ionicons name={icon} size={20} color="#8E8E93" />
       </IconContainer>
       
-      <StyledTextInput
+      <TextInput
+        style={{ flex: 1, fontSize: 16, color: '#FFFFFF', outlineStyle: 'none' as any }}
         placeholder={placeholder}
         placeholderTextColor="#8E8E93"
         value={value}
