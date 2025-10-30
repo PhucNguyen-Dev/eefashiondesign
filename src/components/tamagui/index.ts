@@ -12,3 +12,4 @@ export { default as PremiumButton } from './PremiumButton';
 export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as PropertySlider } from './PropertySlider';
 export { default as Toolbar } from './Toolbar';
+export { default as LayerPanel } from './LayerPanel';
