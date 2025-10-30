@@ -63,35 +63,39 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
         setHue(newHue);
         updateColorPreview(newHue, saturation, brightness);
       },
-      onPanResponderGrant: () => {},
       onPanResponderRelease: () => {
-        const rgb = hsbToRgb(hue, saturation / 100, brightness / 100);
-        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-        handleColorSelect(hex);
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
-        const rgb = hsbToRgb(newHue, saturation / 100, brightness / 100);
-        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-        handleColorSelect(hex);
+        finalizeColorSelection(hue, saturation, brightness);
       },
     })
   ).current;
+
+  const updateColorPreview = (h, s, b) => {
+    // Convert HSB to RGB
+  const updateColorPreview = (h, s, b) => {
+    // Convert HSB to RGB and update color preview without saving to history
+    const rgb = hsbToRgb(h, s / 100, b / 100);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    onColorChange(hex);
+  };
+
+  const finalizeColorSelection = async (h, s, b) => {
+    const rgb = hsbToRgb(h, s / 100, b / 100);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    await colorHistoryService.addColor(hex);
+    await loadRecentColors();
+  };
 
   const saturationSliderPan = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
-        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / (width - 60)) * 100));
         setSaturation(newSaturation);
-        updateColor(hue, newSaturation, brightness);
+        updateColorPreview(hue, newSaturation, brightness);
       },
-      onPanResponderRelease: (evt, gestureState) => {
-        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
-        const rgb = hsbToRgb(hue, newSaturation / 100, brightness / 100);
-        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-        handleColorSelect(hex);
+      onPanResponderRelease: () => {
+        finalizeColorSelection(hue, saturation, brightness);
       },
     })
   ).current;
@@ -101,27 +105,15 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
-        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
+        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / (width - 60)) * 100));
         setBrightness(newBrightness);
-        updateColor(hue, saturation, newBrightness);
+        updateColorPreview(hue, saturation, newBrightness);
       },
-      onPanResponderRelease: (evt, gestureState) => {
-        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / width) * 100));
-        const rgb = hsbToRgb(hue, saturation, newBrightness / 100);
-        const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-        handleColorSelect(hex);
+      onPanResponderRelease: () => {
+        finalizeColorSelection(hue, saturation, brightness);
       },
     })
   ).current;
-
-  const updateColor = (h, s, b) => {
-    // Convert HSB to RGB
-  const updateColorPreview = (h, s, b) => {
-    // Convert HSB to RGB and update color preview without saving to history
-    const rgb = hsbToRgb(h, s / 100, b / 100);
-    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-    onColorChange(hex);
-  };
 
   const hsbToRgb = (h, s, b) => {
     const c = b * s;
