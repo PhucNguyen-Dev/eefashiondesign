@@ -21,6 +21,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
   const [saturation, setSaturation] = useState(100);
   const [brightness, setBrightness] = useState(100);
   const [recentColors, setRecentColors] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   const presetColors = [
     ['#FF6B6B', '#4ECDC4', '#6C63FF', '#FFD93D', '#A8E6CF'],
@@ -48,28 +49,36 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
     setRecentColors(colors);
   };
 
-  const handleColorSelect = async (color) => {
+  const handleColorSelect = async (color, shouldPersist = true) => {
     onColorChange(color);
-    await colorHistoryService.addColor(color);
-    await loadRecentColors();
+    if (shouldPersist) {
+      await colorHistoryService.addColor(color);
+      await loadRecentColors();
+    }
   };
 
   const hueSliderPan = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        setIsDragging(true);
+      },
       onPanResponderMove: (evt, gestureState) => {
         const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
         setHue(newHue);
-        updateColorPreview(newHue, saturation, brightness);
+        updateColor(newHue, saturation, brightness, false);
       },
-      onPanResponderRelease: () => {
-        finalizeColorSelection(hue, saturation, brightness);
+      onPanResponderRelease: (evt, gestureState) => {
+        const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
+        setHue(newHue);
+        updateColor(newHue, saturation, brightness, true);
+        setIsDragging(false);
       },
     })
   ).current;
 
-  const updateColorPreview = (h, s, b) => {
+  const updateColor = async (h, s, b, shouldPersist = true) => {
     // Convert HSB to RGB
   const updateColorPreview = (h, s, b) => {
     // Convert HSB to RGB and update color preview without saving to history
@@ -81,8 +90,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
   const finalizeColorSelection = async (h, s, b) => {
     const rgb = hsbToRgb(h, s / 100, b / 100);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
-    await colorHistoryService.addColor(hex);
-    await loadRecentColors();
+    await handleColorSelect(hex, shouldPersist);
   };
 
   const saturationSliderPan = useRef(
