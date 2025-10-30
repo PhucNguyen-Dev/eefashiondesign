@@ -25,3 +25,4 @@ export { default as TemplateQuickPreview } from './TemplateQuickPreview';
 export { default as OnboardingScreen } from './OnboardingScreen';
 export { TamaguiProfileScreen } from './ProfileScreen';
 export { TamaguiLeftSidebar } from './LeftSidebar';
+export { TamaguiRightSidebar } from './RightSidebar';
