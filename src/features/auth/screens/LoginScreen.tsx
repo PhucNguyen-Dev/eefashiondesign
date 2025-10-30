@@ -128,7 +128,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       return;
     }
 
-    if (!email.includes('@')) {
+    // Email validation using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       Alert.alert("Validation Error", "Please enter a valid email address");
       return;
     }

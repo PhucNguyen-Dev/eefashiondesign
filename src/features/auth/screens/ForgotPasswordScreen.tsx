@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../../core/state/hooks/useAuth';
@@ -92,7 +92,14 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
 
   const handleResetPassword = async () => {
     if (!email) {
-      alert('Please enter your email');
+      Alert.alert('Validation Error', 'Please enter your email');
+      return;
+    }
+
+    // Email validation using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Validation Error', 'Please enter a valid email address');
       return;
     }
 
@@ -101,7 +108,7 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
     if (result.success) {
       setEmailSent(true);
     } else {
-      alert(`Reset failed: ${result.error}`);
+      Alert.alert('Reset Failed', result.error || 'An error occurred while resetting your password');
     }
   };
 

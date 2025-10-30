@@ -39,13 +39,13 @@ const IconContainer = styled(Stack, {
 const Title = styled(TamaguiText, {
   fontSize: 32,
   fontWeight: 'bold',
-  color: '#FFFFFF',
+  color: '$textPrimary',
   textAlign: 'center',
 });
 
 const Subtitle = styled(TamaguiText, {
   fontSize: 16,
-  color: '#8E8E93',
+  color: '$textSecondary',
   textAlign: 'center',
 });
 

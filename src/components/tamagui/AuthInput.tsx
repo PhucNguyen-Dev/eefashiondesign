@@ -83,7 +83,7 @@ const AuthInput: React.FC<AuthInputProps> = ({
       <TextInput
         style={{ flex: 1, fontSize: 16, color: '#FFFFFF', outlineStyle: 'none' as any }}
         placeholder={placeholder}
-        placeholderTextColor="#8E8E93"
+        placeholderTextColor="#B0B0C0"
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={actualSecureTextEntry}
