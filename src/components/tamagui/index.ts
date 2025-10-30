@@ -26,3 +26,4 @@ export { default as OnboardingScreen } from './OnboardingScreen';
 export { TamaguiProfileScreen } from './ProfileScreen';
 export { TamaguiLeftSidebar } from './LeftSidebar';
 export { TamaguiRightSidebar } from './RightSidebar';
+export { TamaguiDesign3DAtelierScreen } from './Design3DAtelierScreen';
