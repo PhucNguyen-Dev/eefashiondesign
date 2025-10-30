@@ -18,3 +18,4 @@ export { default as BottomBar3D } from './BottomBar3D';
 export { default as MobileFallback } from './MobileFallback';
 export { default as FabricSelector } from './FabricSelector';
 export { default as PatternSelector } from './PatternSelector';
+export { default as PropertiesPanel } from './PropertiesPanel';
