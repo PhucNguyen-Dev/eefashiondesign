@@ -265,7 +265,7 @@ export const safeJSONParse = (jsonString, defaultValue = null) => {
     return JSON.parse(jsonString);
   } catch (error) {
     if (__DEV__) {
-      console.warn('[Validation] Failed to parse JSON:', error);
+      console.error('[Validation] Failed to parse JSON:', error);
     }
     return defaultValue;
   }

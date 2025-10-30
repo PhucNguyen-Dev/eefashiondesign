@@ -65,9 +65,7 @@ class AutoSaveService {
    */
   async save() {
     if (!this.currentDesignId || !this.getCurrentDesign) {
-      if (__DEV__) {
-        console.warn('[AutoSave] Cannot save: no design ID or getter configured');
-      }
+      console.warn('[AutoSave] Cannot save: no design ID or getter configured');
       return null;
     }
 
