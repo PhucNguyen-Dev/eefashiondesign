@@ -13,3 +13,4 @@ export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as PropertySlider } from './PropertySlider';
 export { default as Toolbar } from './Toolbar';
 export { default as LayerPanel } from './LayerPanel';
+export { default as Header3D } from './Header3D';
