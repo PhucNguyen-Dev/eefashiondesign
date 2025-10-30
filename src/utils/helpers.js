@@ -317,3 +317,109 @@ export const buildQueryString = (params) => {
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
     .join('&');
 };
+
+/**
+ * Convert HSB/HSV to RGB
+ * @param {number} h - Hue (0-360)
+ * @param {number} s - Saturation (0-1)
+ * @param {number} b - Brightness/Value (0-1)
+ * @returns {object} - {r, g, b} values (0-255)
+ */
+export const hsbToRgb = (h, s, b) => {
+  const c = b * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = b - c;
+  let r, g, b2;
+
+  if (h >= 0 && h < 60) {
+    [r, g, b2] = [c, x, 0];
+  } else if (h >= 60 && h < 120) {
+    [r, g, b2] = [x, c, 0];
+  } else if (h >= 120 && h < 180) {
+    [r, g, b2] = [0, c, x];
+  } else if (h >= 180 && h < 240) {
+    [r, g, b2] = [0, x, c];
+  } else if (h >= 240 && h < 300) {
+    [r, g, b2] = [x, 0, c];
+  } else {
+    [r, g, b2] = [c, 0, x];
+  }
+
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b2 + m) * 255),
+  };
+};
+
+/**
+ * Convert RGB to Hex
+ * @param {number} r - Red (0-255)
+ * @param {number} g - Green (0-255)
+ * @param {number} b - Blue (0-255)
+ * @returns {string} - Hex color string (#RRGGBB)
+ */
+export const rgbToHex = (r, g, b) => {
+  return '#' + [r, g, b].map(x => {
+    const hex = x.toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  }).join('');
+};
+
+/**
+ * Convert Hex to RGB
+ * @param {string} hex - Hex color string (#RRGGBB or #RGB)
+ * @returns {object} - {r, g, b} values (0-255)
+ */
+export const hexToRgb = (hex) => {
+  // Remove # if present
+  hex = hex.replace('#', '');
+  
+  // Handle short hex format (#RGB)
+  if (hex.length === 3) {
+    hex = hex.split('').map(char => char + char).join('');
+  }
+  
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  
+  return { r, g, b };
+};
+
+/**
+ * Convert RGB to HSB/HSV
+ * @param {number} r - Red (0-255)
+ * @param {number} g - Green (0-255)
+ * @param {number} b - Blue (0-255)
+ * @returns {object} - {h, s, b} values (h: 0-360, s: 0-1, b: 0-1)
+ */
+export const rgbToHsb = (r, g, b) => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+
+  let h = 0;
+  let s = max === 0 ? 0 : delta / max;
+  let v = max;
+
+  if (delta !== 0) {
+    if (max === r) {
+      h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+    } else if (max === g) {
+      h = ((b - r) / delta + 2) / 6;
+    } else {
+      h = ((r - g) / delta + 4) / 6;
+    }
+  }
+
+  return {
+    h: Math.round(h * 360),
+    s: s,
+    b: v,
+  };
+};
