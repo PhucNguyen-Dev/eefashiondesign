@@ -14,3 +14,4 @@ export { default as PropertySlider } from './PropertySlider';
 export { default as Toolbar } from './Toolbar';
 export { default as LayerPanel } from './LayerPanel';
 export { default as Header3D } from './Header3D';
+export { default as BottomBar3D } from './BottomBar3D';
