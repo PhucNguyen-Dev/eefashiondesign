@@ -1,41 +1,101 @@
 /**
- * Sign Up Screen
+ * Sign Up Screen - Migrated to Tamagui
  * User registration - Create new account
  */
 
 import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  TextInput,
   TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
   ActivityIndicator,
   Alert,
+  Platform,
 } from "react-native";
+import { styled, YStack, XStack } from '@tamagui/core';
 import PropTypes from "prop-types";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../../core/state/hooks/useAuth";
+import { AuthContainer, AuthInput, Button, ButtonText, Text as TamaguiText } from '../../../components/tamagui';
+
+// Styled components
+const ErrorContainer = styled(XStack, {
+  backgroundColor: '$errorBg',
+  borderRadius: '$md',
+  padding: '$md',
+  gap: '$sm',
+  alignItems: 'center',
+});
+
+const ErrorText = styled(TamaguiText, {
+  color: '$error',
+  fontSize: 14,
+  flex: 1,
+});
+
+const CheckboxContainer = styled(XStack, {
+  alignItems: 'center',
+  gap: '$sm',
+  marginVertical: '$md',
+});
+
+const CheckboxButton = styled(TouchableOpacity, {
+  width: 24,
+  height: 24,
+  borderRadius: 6,
+  borderWidth: 2,
+  borderColor: '$border',
+  alignItems: 'center',
+  justifyContent: 'center',
+  variants: {
+    checked: {
+      true: {
+        backgroundColor: '$primary',
+        borderColor: '$primary',
+      },
+    },
+  } as any,
+});
+
+const CheckboxText = styled(TamaguiText, {
+  flex: 1,
+  color: '$textSecondary',
+  fontSize: 14,
+});
+
+const LinkText = styled(TamaguiText, {
+  color: '$primary',
+  fontWeight: '600',
+});
+
+const LoginContainer = styled(XStack, {
+  justifyContent: 'center',
+  marginTop: '$xl',
+  gap: '$xs',
+});
+
+const LoginText = styled(TamaguiText, {
+  color: '$textSecondary',
+  fontSize: 14,
+});
+
+const LoginLink = styled(TouchableOpacity, {});
+
+const LoginLinkText = styled(TamaguiText, {
+  color: '$primary',
+  fontSize: 14,
+  fontWeight: 'bold',
+});
 
 const SignUpScreen = ({ navigation }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const { signUp, isLoading, error, clearError, user, isAuthenticated } = useAuth();
 
   // Monitor authentication state
   useEffect(() => {
     console.log('SignUpScreen - Auth state changed:', { user, isAuthenticated });
-    
-    // If user is authenticated after sign up, they'll be automatically navigated
-    // No manual navigation needed - App.js handles this
   }, [isAuthenticated, user]);
 
   const handleSignUp = async () => {
@@ -104,389 +164,128 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <AuthContainer
+      title="Create Account"
+      subtitle="Join eeFashionita today"
+      icon="diamond"
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <Ionicons name="diamond" size={60} color="#4A90E2" />
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join eeFashionita today</Text>
-        </View>
+      <YStack gap="$md">
+        {/* Name Input */}
+        <AuthInput
+          icon="person-outline"
+          placeholder="Full Name"
+          value={name}
+          onChangeText={(text) => {
+            setName(text);
+            clearError();
+          }}
+          autoCapitalize="words"
+          autoComplete="name"
+          editable={!isLoading}
+        />
 
-        {/* Form */}
-        <View style={styles.form}>
-          {/* Name Input */}
-          <View style={styles.inputContainer}>
-            <Ionicons
-              name="person-outline"
-              size={20}
-              color="#8E8E93"
-              style={styles.inputIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Full Name"
-              placeholderTextColor="#8E8E93"
-              value={name}
-              onChangeText={(text) => {
-                setName(text);
-                clearError();
-              }}
-              autoCapitalize="words"
-              autoComplete="name"
-              editable={!isLoading}
-            />
-          </View>
+        {/* Email Input */}
+        <AuthInput
+          icon="mail-outline"
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            clearError();
+          }}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          editable={!isLoading}
+        />
 
-          {/* Email Input */}
-          <View style={styles.inputContainer}>
-            <Ionicons
-              name="mail-outline"
-              size={20}
-              color="#8E8E93"
-              style={styles.inputIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor="#8E8E93"
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                clearError();
-              }}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              autoComplete="email"
-              editable={!isLoading}
-            />
-          </View>
+        {/* Password Input */}
+        <AuthInput
+          icon="lock-closed-outline"
+          placeholder="Password (min. 6 characters)"
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+            clearError();
+          }}
+          secureTextEntry
+          showPasswordToggle
+          autoComplete="password-new"
+          editable={!isLoading}
+        />
 
-          {/* Password Input */}
-          <View style={styles.inputContainer}>
-            <Ionicons
-              name="lock-closed-outline"
-              size={20}
-              color="#8E8E93"
-              style={styles.inputIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Password (min 6 characters)"
-              placeholderTextColor="#8E8E93"
-              value={password}
-              onChangeText={(text) => {
-                setPassword(text);
-                clearError();
-              }}
-              secureTextEntry={!showPassword}
-              autoComplete="password-new"
-              editable={!isLoading}
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowPassword(!showPassword)}
-              disabled={isLoading}
-            >
-              <Ionicons
-                name={showPassword ? "eye-outline" : "eye-off-outline"}
-                size={20}
-                color="#8E8E93"
-              />
-            </TouchableOpacity>
-          </View>
+        {/* Confirm Password Input */}
+        <AuthInput
+          icon="lock-closed-outline"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            clearError();
+          }}
+          secureTextEntry
+          showPasswordToggle
+          autoComplete="password-new"
+          editable={!isLoading}
+        />
 
-          {/* Confirm Password Input */}
-          <View style={styles.inputContainer}>
-            <Ionicons
-              name="lock-closed-outline"
-              size={20}
-              color="#8E8E93"
-              style={styles.inputIcon}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              placeholderTextColor="#8E8E93"
-              value={confirmPassword}
-              onChangeText={(text) => {
-                setConfirmPassword(text);
-                clearError();
-              }}
-              secureTextEntry={!showConfirmPassword}
-              autoComplete="password-new"
-              editable={!isLoading}
-            />
-            <TouchableOpacity
-              style={styles.eyeIcon}
-              onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-              disabled={isLoading}
-            >
-              <Ionicons
-                name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
-                size={20}
-                color="#8E8E93"
-              />
-            </TouchableOpacity>
-          </View>
-
-          {/* Terms Checkbox */}
-          <TouchableOpacity
-            style={styles.checkboxContainer}
+        {/* Terms and Conditions Checkbox */}
+        <CheckboxContainer>
+          <CheckboxButton
+            checked={agreedToTerms}
             onPress={() => setAgreedToTerms(!agreedToTerms)}
             disabled={isLoading}
           >
-            <View
-              style={[styles.checkbox, agreedToTerms && styles.checkboxChecked]}
-            >
-              {agreedToTerms && (
-                <Ionicons name="checkmark" size={16} color="#fff" />
-              )}
-            </View>
-            <Text style={styles.checkboxText}>
-              I agree to the <Text style={styles.link}>Terms of Service</Text>{" "}
-              and <Text style={styles.link}>Privacy Policy</Text>
-            </Text>
-          </TouchableOpacity>
-
-          {/* Error Message */}
-          {error && (
-            <View style={styles.errorContainer}>
-              <Ionicons name="alert-circle" size={20} color="#FF6B6B" />
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          )}
-
-          {/* Sign Up Button */}
-          <TouchableOpacity
-            style={[
-              styles.signUpButton,
-              isLoading && styles.signUpButtonDisabled,
-            ]}
-            onPress={handleSignUp}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator color="#fff" />
-                <Text style={styles.loadingText}>Creating account...</Text>
-              </View>
-            ) : (
-              <Text style={styles.signUpButtonText}>Create Account</Text>
+            {agreedToTerms && (
+              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
             )}
-          </TouchableOpacity>
+          </CheckboxButton>
+          <CheckboxText>
+            I agree to the <LinkText>Terms of Service</LinkText> and{' '}
+            <LinkText>Privacy Policy</LinkText>
+          </CheckboxText>
+        </CheckboxContainer>
 
-          {/* Divider */}
-          <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>OR</Text>
-            <View style={styles.dividerLine} />
-          </View>
+        {/* Error Message */}
+        {error && (
+          <ErrorContainer>
+            <Ionicons name="alert-circle" size={20} color="#FF6B6B" />
+            <ErrorText>{error}</ErrorText>
+          </ErrorContainer>
+        )}
 
-          {/* Social Sign Up Buttons (Placeholder) */}
-          <View style={styles.socialButtons}>
-            <TouchableOpacity style={styles.socialButton} disabled={isLoading}>
-              <Ionicons name="logo-google" size={24} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton} disabled={isLoading}>
-              <Ionicons name="logo-facebook" size={24} color="#fff" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton} disabled={isLoading}>
-              <Ionicons name="logo-apple" size={24} color="#fff" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.socialNote}>Social sign up coming soon</Text>
+        {/* Sign Up Button */}
+        <Button
+          variant="primary"
+          size="lg"
+          onPress={handleSignUp}
+          disabled={isLoading}
+          style={{ marginTop: 16 }}
+        >
+          {isLoading ? (
+            <XStack gap="$sm" alignItems="center">
+              <ActivityIndicator color="#fff" />
+              <ButtonText>Creating Account...</ButtonText>
+            </XStack>
+          ) : (
+            <ButtonText>Create Account</ButtonText>
+          )}
+        </Button>
 
-          {/* Login Link */}
-          <View style={styles.loginContainer}>
-            <Text style={styles.loginText}>Already have an account? </Text>
-            <TouchableOpacity onPress={handleLogin} disabled={isLoading}>
-              <Text style={styles.loginLink}>Sign In</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        {/* Login Link */}
+        <LoginContainer>
+          <LoginText>Already have an account?</LoginText>
+          <LoginLink onPress={handleLogin}>
+            <LoginLinkText>Sign In</LoginLinkText>
+          </LoginLink>
+        </LoginContainer>
+      </YStack>
+    </AuthContainer>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1a1d2e",
-  },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: "center",
-    padding: 24,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#fff",
-    marginTop: 16,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#8E8E93",
-    marginTop: 8,
-  },
-  form: {
-    width: "100%",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#252837",
-    borderRadius: 12,
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    height: 56,
-  },
-  inputIcon: {
-    marginRight: 12,
-  },
-  input: {
-    flex: 1,
-    color: "#fff",
-    fontSize: 16,
-  },
-  eyeIcon: {
-    padding: 4,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: "#8E8E93",
-    marginRight: 12,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  checkboxChecked: {
-    backgroundColor: "#4A90E2",
-    borderColor: "#4A90E2",
-  },
-  checkboxText: {
-    color: "#8E8E93",
-    fontSize: 14,
-    flex: 1,
-  },
-  link: {
-    color: "#4A90E2",
-  },
-  errorContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FF6B6B20",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: "#FF6B6B",
-    fontSize: 14,
-    marginLeft: 8,
-    flex: 1,
-  },
-  signUpButton: {
-    backgroundColor: "#4A90E2",
-    borderRadius: 12,
-    height: 56,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  signUpButtonDisabled: {
-    opacity: 0.6,
-  },
-  signUpButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  loadingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-    marginLeft: 8,
-  },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#3A3D4E",
-  },
-  dividerText: {
-    color: "#8E8E93",
-    fontSize: 14,
-    marginHorizontal: 16,
-  },
-  socialButtons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 16,
-    marginBottom: 8,
-  },
-  socialButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    backgroundColor: "#252837",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  socialNote: {
-    color: "#8E8E93",
-    fontSize: 12,
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  loginContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loginText: {
-    color: "#8E8E93",
-    fontSize: 16,
-  },
-  loginLink: {
-    color: "#4A90E2",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
-
 SignUpScreen.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
+  navigation: PropTypes.object.isRequired,
 };
 
 export default SignUpScreen;
