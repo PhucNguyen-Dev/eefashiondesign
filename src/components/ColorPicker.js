@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import colorHistoryService from '../services/colorHistoryService';
 
 const { width } = Dimensions.get('window');
 
@@ -19,6 +20,8 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
   const [hue, setHue] = useState(0);
   const [saturation, setSaturation] = useState(100);
   const [brightness, setBrightness] = useState(100);
+  const [recentColors, setRecentColors] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
 
   const presetColors = [
     ['#FF6B6B', '#4ECDC4', '#6C63FF', '#FFD93D', '#A8E6CF'],
@@ -36,24 +39,94 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
     { colors: ['#C7CEEA', '#B2E1D4'], name: 'Pastel' },
   ];
 
+  // Load recent colors from history on mount
+  useEffect(() => {
+    loadRecentColors();
+  }, []);
+
+  const loadRecentColors = async () => {
+    const colors = await colorHistoryService.getRecentColors(10);
+    setRecentColors(colors);
+  };
+
+  const handleColorSelect = async (color, shouldPersist = true) => {
+    onColorChange(color);
+    if (shouldPersist) {
+      await colorHistoryService.addColor(color);
+      await loadRecentColors();
+    }
+  };
+
   const hueSliderPan = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        setIsDragging(true);
+      },
       onPanResponderMove: (evt, gestureState) => {
         const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
         setHue(newHue);
+        updateColorPreview(newHue, saturation, brightness);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const newHue = Math.max(0, Math.min(360, (gestureState.moveX / width) * 360));
         updateColor(newHue, saturation, brightness);
       },
     })
   ).current;
 
-  const updateColor = (h, s, b) => {
+  const updateColorPreview = (h, s, b) => {
     // Convert HSB to RGB
     const rgb = hsbToRgb(h, s / 100, b / 100);
     const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
     onColorChange(hex);
   };
+
+  const updateColor = async (h, s, b) => {
+    // Convert HSB to RGB
+  const updateColorPreview = (h, s, b) => {
+    // Convert HSB to RGB and update color preview without saving to history
+    const rgb = hsbToRgb(h, s / 100, b / 100);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    onColorChange(hex);
+  };
+
+  const finalizeColorSelection = async (h, s, b) => {
+    const rgb = hsbToRgb(h, s / 100, b / 100);
+    const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+    await handleColorSelect(hex, shouldPersist);
+  };
+
+  const saturationSliderPan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newSaturation = Math.max(0, Math.min(100, (gestureState.moveX / (width - 60)) * 100));
+        setSaturation(newSaturation);
+        updateColorPreview(hue, newSaturation, brightness);
+      },
+      onPanResponderRelease: () => {
+        finalizeColorSelection(hue, saturation, brightness);
+      },
+    })
+  ).current;
+
+  const brightnessSliderPan = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newBrightness = Math.max(0, Math.min(100, (gestureState.moveX / (width - 60)) * 100));
+        setBrightness(newBrightness);
+        updateColorPreview(hue, saturation, newBrightness);
+      },
+      onPanResponderRelease: () => {
+        finalizeColorSelection(hue, saturation, brightness);
+      },
+    })
+  ).current;
 
   const hsbToRgb = (h, s, b) => {
     const c = b * s;
@@ -137,7 +210,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
                 <TouchableOpacity
                   key={color}
                   style={[styles.colorSwatch, { backgroundColor: color }]}
-                  onPress={() => onColorChange(color)}
+                  onPress={() => handleColorSelect(color)}
                 >
                   {currentColor === color && (
                     <MaterialCommunityIcons name="check" size={20} color="#fff" />
@@ -182,7 +255,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
           {/* Saturation Slider */}
           <View style={styles.sliderContainer}>
             <Text style={styles.sliderLabel}>Saturation</Text>
-            <View style={styles.slider}>
+            <View style={styles.slider} {...saturationSliderPan.panHandlers}>
               <LinearGradient
                 colors={['#808080', currentColor]}
                 start={{ x: 0, y: 0 }}
@@ -201,7 +274,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
           {/* Brightness Slider */}
           <View style={styles.sliderContainer}>
             <Text style={styles.sliderLabel}>Brightness</Text>
-            <View style={styles.slider}>
+            <View style={styles.slider} {...brightnessSliderPan.panHandlers}>
               <LinearGradient
                 colors={['#000000', currentColor]}
                 start={{ x: 0, y: 0 }}
@@ -226,7 +299,7 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
             <TouchableOpacity
               key={index}
               style={styles.gradientOption}
-              onPress={() => onColorChange(gradient.colors[0])}
+              onPress={() => handleColorSelect(gradient.colors[0])}
             >
               <LinearGradient
                 colors={gradient.colors}
@@ -244,13 +317,21 @@ const ColorPicker = ({ currentColor, onColorChange }) => {
       <View style={styles.recentContainer}>
         <Text style={styles.recentLabel}>Recent Colors</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {['#6C63FF', '#FF6B6B', '#4ECDC4', '#FFD93D', '#A8E6CF'].map((color) => (
-            <TouchableOpacity
-              key={color}
-              style={[styles.recentColor, { backgroundColor: color }]}
-              onPress={() => onColorChange(color)}
-            />
-          ))}
+          {recentColors.length > 0 ? (
+            recentColors.map((color, index) => (
+              <TouchableOpacity
+                key={`${color}-${index}`}
+                style={[styles.recentColor, { backgroundColor: color }]}
+                onPress={() => handleColorSelect(color)}
+              >
+                {currentColor === color && (
+                  <MaterialCommunityIcons name="check" size={16} color="#fff" />
+                )}
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>No recent colors yet</Text>
+          )}
         </ScrollView>
       </View>
     </View>
@@ -404,6 +485,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderWidth: 2,
     borderColor: '#2A2A3E',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    color: '#666',
+    fontSize: 12,
+    fontStyle: 'italic',
   },
 });
 

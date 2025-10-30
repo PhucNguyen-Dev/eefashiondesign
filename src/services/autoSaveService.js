@@ -35,7 +35,9 @@ class AutoSaveService {
       }
     }, this.saveInterval);
 
-    console.log('[AutoSave] Started auto-save');
+    if (__DEV__) {
+      console.log('[AutoSave] Started auto-save');
+    }
   }
 
   /**
@@ -45,7 +47,9 @@ class AutoSaveService {
     if (this.saveTimer) {
       clearInterval(this.saveTimer);
       this.saveTimer = null;
-      console.log('[AutoSave] Stopped auto-save');
+      if (__DEV__) {
+        console.log('[AutoSave] Stopped auto-save');
+      }
     }
   }
 
@@ -104,7 +108,9 @@ class AutoSaveService {
       this.lastSaveTime = new Date();
       this.pendingChanges = false;
 
-      console.log(`[AutoSave] Saved version for design ${designId}`);
+      if (__DEV__) {
+        console.log(`[AutoSave] Saved version for design ${designId}`);
+      }
 
       return version;
     } catch (error) {

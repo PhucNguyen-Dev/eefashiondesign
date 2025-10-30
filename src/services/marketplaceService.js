@@ -18,7 +18,9 @@ class MarketplaceService {
       const data = await AsyncStorage.getItem(this.STORAGE_KEY);
       return data ? JSON.parse(data) : this.getInitialData();
     } catch (error) {
-      console.error('Failed to load marketplace data:', error);
+      if (__DEV__) {
+        console.error('Failed to load marketplace data:', error);
+      }
       return this.getInitialData();
     }
   }
