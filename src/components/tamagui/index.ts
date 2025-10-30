@@ -19,3 +19,4 @@ export { default as MobileFallback } from './MobileFallback';
 export { default as FabricSelector } from './FabricSelector';
 export { default as PatternSelector } from './PatternSelector';
 export { default as PropertiesPanel } from './PropertiesPanel';
+export { default as DesignTips } from './DesignTips';
