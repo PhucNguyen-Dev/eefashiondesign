@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
-import { THEME_COLORS } from '../../../../core/utils/constants';
+import { TamaguiLeftSidebar } from '../../../../components/tamagui/LeftSidebar';
 
-const LeftSidebar = ({ selectedTool, setSelectedTool, selectedGarment, setSelectedGarment }) => {
+// Legacy wrapper for backward compatibility
+const LeftSidebar = (props) => {
+  return <TamaguiLeftSidebar {...props} />;
+};
+
+export default LeftSidebar;
+
+/* Original implementation migrated to src/components/tamagui/LeftSidebar.tsx
+const LeftSidebarOriginal = ({ selectedTool, setSelectedTool, selectedGarment, setSelectedGarment }) => {
   const [expandedSection, setExpandedSection] = useState('tools');
 
   // View Controls
@@ -343,6 +341,4 @@ const styles = StyleSheet.create({
     color: THEME_COLORS.text.primary,
   },
 });
-
-export default LeftSidebar;
-
+*/
