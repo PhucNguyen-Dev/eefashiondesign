@@ -2,11 +2,13 @@ import React from 'react';
 import {
   TouchableOpacity,
   ScrollView,
+  // @ts-ignore - Slider exists in React Native but TypeScript types may not include it
   Slider,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { COLORS, SPACING, FONT_SIZES, BORDER_RADIUS } from '../../config/constants';
-import { styled, Stack, XStack, YStack } from '@tamagui/core';
+import { styled } from '@tamagui/core';
+import { Stack, XStack, YStack } from '../tamagui';
 import { Text } from '../tamagui';
 
 // Styled components using Tamagui

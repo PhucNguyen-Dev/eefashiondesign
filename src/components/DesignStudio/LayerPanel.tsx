@@ -8,7 +8,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { COLORS, SPACING, FONT_SIZES, BORDER_RADIUS } from '../../config/constants';
-import { styled, Stack, XStack, YStack } from '@tamagui/core';
+import { styled } from '@tamagui/core';
+import { Stack, XStack, YStack } from '../tamagui';
 import { Text } from '../tamagui';
 
 // Styled components using Tamagui

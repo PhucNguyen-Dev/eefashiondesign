@@ -11,7 +11,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { BlurView } from 'expo-blur';
-import { styled, Stack, XStack, YStack } from '@tamagui/core';
+import { styled } from '@tamagui/core';
+import { Stack, XStack, YStack } from './tamagui';
 import { Text } from './tamagui';
 
 const { width, height } = Dimensions.get('window');

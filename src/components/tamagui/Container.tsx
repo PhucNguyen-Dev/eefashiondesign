@@ -1,5 +1,18 @@
-import { styled } from '@tamagui/core';
+import { styled, Stack as TamaguiStack } from '@tamagui/core';
 import { View, ScrollView } from 'react-native';
+
+// Create Stack, XStack, YStack based on Tamagui Stack
+export const Stack = TamaguiStack;
+
+export const XStack = styled(TamaguiStack, {
+  name: 'XStack',
+  flexDirection: 'row',
+});
+
+export const YStack = styled(TamaguiStack, {
+  name: 'YStack',
+  flexDirection: 'column',
+});
 
 export const Container = styled(View, {
   name: 'Container',

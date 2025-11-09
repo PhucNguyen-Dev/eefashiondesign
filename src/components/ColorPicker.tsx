@@ -9,7 +9,8 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colorHistoryService from '../services/colorHistoryService';
-import { styled, Stack, XStack, YStack } from '@tamagui/core';
+import { styled } from '@tamagui/core';
+import { Stack, XStack, YStack } from './tamagui';
 import { Text } from './tamagui';
 
 const { width } = Dimensions.get('window');

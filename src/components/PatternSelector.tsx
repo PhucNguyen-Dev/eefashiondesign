@@ -6,7 +6,8 @@ import {
 } from 'react-native';
 import Svg, { Circle, Rect, Line, Path, Pattern, Defs } from 'react-native-svg';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { styled, Stack, XStack, YStack } from '@tamagui/core';
+import { styled } from '@tamagui/core';
+import { Stack, XStack, YStack } from './tamagui';
 import { Text } from './tamagui';
 
 const { width } = Dimensions.get('window');
