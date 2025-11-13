@@ -1,5 +1,5 @@
 import { config } from '@tamagui/config/v3'
-import { createTamagui } from '@tamagui/core'
+import createTamagui from '@tamagui/core'
 
 // Custom theme colors matching the app's design
 const customTokens = {

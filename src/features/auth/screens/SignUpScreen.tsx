@@ -150,7 +150,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
     console.log('Sign up result:', result);
 
-    if (result.success) {
+    if (result.success && 'user' in result) {
       console.log('Sign up successful! User:', result.user);
       // Show success message
       if (Platform.OS === "web") {
@@ -162,7 +162,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           [{ text: "OK", onPress: () => navigation.navigate("Login") }]
         );
       }
-    } else {
+    } else if ('error' in result) {
       console.error('Sign up failed:', result.error);
       Alert.alert("Sign Up Failed", result.error || "An error occurred during sign up");
     }

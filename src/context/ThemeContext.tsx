@@ -44,20 +44,23 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const systemColorScheme = useColorScheme();
-  const { theme: userTheme, setTheme, toggleTheme } = useAppStore();
+  const { theme: userTheme, setTheme: appSetTheme, toggleTheme } = useAppStore();
 
-  // Determine active theme (user preference or system)
-  const activeTheme = (() => {
-    if (userTheme === 'system') {
-      return systemColorScheme === 'dark' ? 'dark' : 'light';
-    }
-    return userTheme === 'dark' ? 'dark' : 'light';
-  })();
+  // Determine active theme (user preference only, no system support in appStore)
+  const activeTheme = userTheme === 'dark' ? 'dark' : 'light';
   
   const isDark = activeTheme === 'dark';
 
   // Get theme colors
   const colors = useMemo(() => (isDark ? COLORS : LIGHT_COLORS) as ColorScheme, [isDark]);
+
+  // Wrapper for setTheme that only accepts 'light' | 'dark'
+  const setTheme = (theme: ThemeMode) => {
+    if (theme === 'light' || theme === 'dark') {
+      appSetTheme(theme);
+    }
+    // Ignore 'system' as it's not supported by appStore
+  };
 
   const theme = useMemo<ThemeContextValue>(
     () => ({
@@ -69,7 +72,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       activeTheme,
       userTheme: userTheme as ThemeMode,
     }),
-    [colors, isDark, activeTheme, userTheme, setTheme, toggleTheme]
+    [colors, isDark, activeTheme, userTheme, toggleTheme]
   );
 
   return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;

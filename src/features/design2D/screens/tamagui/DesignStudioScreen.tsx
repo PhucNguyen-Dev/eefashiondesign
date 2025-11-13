@@ -327,22 +327,24 @@ const DesignStudioScreen: React.FC<DesignStudioScreenProps> = ({ navigation }) =
 
   const handleUndo = (): void => {
     if (canUndo()) {
-      const previousState = undo();
-      if (previousState) {
-        setDesignElements((previousState as DesignData).designElements || []);
-        setPaths((previousState as DesignData).paths || []);
-        setLayers((previousState as DesignData).layers || []);
+      undo();
+      const currentState = designStore.currentDesign;
+      if (currentState) {
+        setDesignElements((currentState as unknown as DesignData).designElements || []);
+        setPaths((currentState as unknown as DesignData).paths || []);
+        setLayers((currentState as unknown as DesignData).layers || []);
       }
     }
   };
 
   const handleRedo = (): void => {
     if (canRedo()) {
-      const nextState = redo();
-      if (nextState) {
-        setDesignElements((nextState as DesignData).designElements || []);
-        setPaths((nextState as DesignData).paths || []);
-        setLayers((nextState as DesignData).layers || []);
+      redo();
+      const currentState = designStore.currentDesign;
+      if (currentState) {
+        setDesignElements((currentState as unknown as DesignData).designElements || []);
+        setPaths((currentState as unknown as DesignData).paths || []);
+        setLayers((currentState as unknown as DesignData).layers || []);
       }
     }
   };
