@@ -79,7 +79,6 @@ const TutorialOverlay: React.FC<TutorialOverlayProps> = ({ visible, onClose }) =
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const [dimensions, setDimensions] = useState({ width, height });
-  const theme = useTheme();
 
   const {
     currentStep,

@@ -102,7 +102,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef<FlatList>(null);
   const { setOnboardingCompleted } = useAppStore();
-  const theme = useTheme();
 
   const viewableItemsChanged = useRef(({ viewableItems }: any) => {
     setCurrentIndex(viewableItems[0]?.index || 0);
