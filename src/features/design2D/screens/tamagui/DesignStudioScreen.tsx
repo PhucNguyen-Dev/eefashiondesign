@@ -32,7 +32,7 @@ import DesignTips from '../../../../components/DesignTips.js';
 import { useDesignStore } from '@state/appStore';
 import exportService from '../../../../services/exportService.js';
 import autoSaveService from '../../../../services/autoSaveService.js';
-import useKeyboardShortcuts, { COMMON_SHORTCUTS } from '../../../../hooks/useKeyboardShortcuts.js';
+import useKeyboardShortcuts, { COMMON_SHORTCUTS } from '../../../../hooks/useKeyboardShortcuts';
 
 // Import types
 import type {
@@ -50,7 +50,7 @@ import type {
   LayerItemProps,
   DesignElementProps,
   DesignStudioScreenProps,
-} from './types.js';
+} from './types';
 
 const { width, height } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 40;

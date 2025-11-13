@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Animated, Dimensions, FlatList } from 'react-native';
-import { Stack, Text, Button, styled, useTheme } from 'tamagui';
+import { Stack, Text, Button, styled } from '@tamagui/core';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppStore } from '@state/appStore';
