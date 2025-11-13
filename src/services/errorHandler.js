@@ -1,5 +1,4 @@
 import { Alert } from 'react-native';
-import { useNotificationStore } from '../store';
 
 /**
  * Error types
@@ -96,6 +95,9 @@ class ErrorHandler {
 
   /**
    * Handle error with user notification
+   * @param {Error} error - The error to handle
+   * @param {Object} options - Handling options
+   * @param {Function} options.notificationStore - Optional notification store for displaying notifications
    */
   handleError(error, options = {}) {
     const {
@@ -103,6 +105,7 @@ class ErrorHandler {
       showNotification = false,
       customMessage = null,
       onDismiss = null,
+      notificationStore = null,
     } = options;
 
     this.logError(error);
@@ -123,8 +126,7 @@ class ErrorHandler {
       );
     }
 
-    if (showNotification) {
-      const notificationStore = useNotificationStore.getState();
+    if (showNotification && notificationStore) {
       notificationStore.addNotification({
         type: 'error',
         title: 'Error',

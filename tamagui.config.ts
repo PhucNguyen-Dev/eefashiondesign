@@ -18,6 +18,7 @@ const customTokens = {
     bgPrimary: '#0F0F1E',
     bgSecondary: '#1A1A2E',
     bgCard: '#1E1E3F',
+    bgInput: '#2A2A3E',
     bgHover: '#252545',
     
     // Text colors

@@ -12,7 +12,7 @@ const YStack = styled(Stack, { flexDirection: 'column' });
 interface Fabric {
   id: string;
   name: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: string;
   description: string;
   properties: string[];
   colors: string[];
@@ -140,7 +140,7 @@ const FabricCardComponent: React.FC<{ fabric: Fabric; isSelected: boolean; onSel
     <FabricCard selected={isSelected} onPress={() => onSelect(fabric)}>
       <LinearGradient colors={fabric.colors} style={{ width: 100, height: 120, alignItems: 'center', justifyContent: 'center' }}>
         <YStack>
-          <MaterialCommunityIcons name={fabric.icon} size={40} color="#fff" />
+          <MaterialCommunityIcons name={fabric.icon as any} size={40} color="#fff" />
         </YStack>
       </LinearGradient>
       <FabricInfo>

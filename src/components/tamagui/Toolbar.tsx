@@ -19,7 +19,7 @@ interface ToolbarProps {
 
 interface Tool {
   id: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: string;
   name: string;
 }
 
@@ -132,11 +132,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
                   borderRadius: 12,
                 }}
               >
-                <MaterialCommunityIcons name={tool.icon} size={24} color="#fff" />
+                <MaterialCommunityIcons name={tool.icon as any} size={24} color="#fff" />
               </LinearGradient>
             ) : (
               <MaterialCommunityIcons
-                name={tool.icon}
+                name={tool.icon as any}
                 size={24}
                 color="#B0B0C0"
               />

@@ -3,7 +3,7 @@ import { Animated, Dimensions, FlatList } from 'react-native';
 import { Stack, Text, Button, styled, useTheme } from 'tamagui';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAppStore } from '../../store';
+import { useAppStore } from '@state/appStore';
 
 const { width, height } = Dimensions.get('window');
 

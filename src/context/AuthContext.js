@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { onAuthStateChange } from '../core/services/api/auth.api';
+import { onAuthStateChange } from '@infrastructure/api/supabase/auth.api';
 
 // Create the context with a default shape for better autocompletion
 const AuthContext = createContext({

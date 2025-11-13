@@ -1,6 +1,6 @@
 import React from 'react';
 import { TamaguiProfileScreen } from '../components/tamagui/ProfileScreen';
-import { useAuth } from '../core/state/hooks/useAuth';
+import { useAuth } from '@infrastructure/auth/useAuth';
 
 const ProfileScreen = () => {
   const { user, signOut } = useAuth();

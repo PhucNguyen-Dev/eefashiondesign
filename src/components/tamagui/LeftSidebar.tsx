@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Stack, Text, ScrollView, styled } from 'tamagui';
-import { TouchableOpacity } from 'react-native';
+import { Stack, Text, styled } from '@tamagui/core';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
-import { THEME_COLORS } from '../../core/utils/constants';
+import { THEME_COLORS } from '@infrastructure/config/constants';
 
 interface LeftSidebarProps {
   selectedTool: string;
@@ -126,7 +126,7 @@ export const TamaguiLeftSidebar: React.FC<LeftSidebarProps> = ({
   selectedGarment,
   setSelectedGarment,
 }) => {
-  const [expandedSection, setExpandedSection] = useState('tools');
+  const [expandedSection, setExpandedSection] = useState<string | null>('tools');
 
   // View Controls
   const viewControls = [

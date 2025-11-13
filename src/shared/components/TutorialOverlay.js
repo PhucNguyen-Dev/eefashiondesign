@@ -1,5 +1,5 @@
 // Legacy wrapper - imports Tamagui version
-import TutorialOverlayTamagui from '../../components/tamagui/TutorialOverlay';
+import TutorialOverlayTamagui from '@components/tamagui/TutorialOverlay';
 
 const TutorialOverlay = TutorialOverlayTamagui;
 

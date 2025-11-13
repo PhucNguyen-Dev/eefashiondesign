@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Stack, styled } from 'tamagui';
-import { supports3D } from '../../core/utils/platform';
-import { THEME_COLORS } from '../../core/utils/constants';
+import { Stack, styled } from '@tamagui/core';
+import { supports3D } from '@infrastructure/platform/guards/GLCapabilityGuard';
+import { THEME_COLORS } from '@infrastructure/config/constants';
 
 // Import components
-import { TamaguiHeader3D } from './Header3D';
-import { TamaguiLeftSidebar } from './LeftSidebar';
-import { TamaguiRightSidebar } from './RightSidebar';
-import { TamaguiBottomBar3D } from './BottomBar3D';
+import TamaguiHeader3D from './Header3D';
+import TamaguiLeftSidebar from './LeftSidebar';
+import TamaguiRightSidebar from './RightSidebar';
+import TamaguiBottomBar3D from './BottomBar3D';
 import Viewport3D from '../../features/design3D/components/viewport/Viewport3D';
-import { TamaguiMobileFallback } from './MobileFallback';
+import TamaguiMobileFallback from './MobileFallback';
 
 interface Design3DAtelierScreenProps {
   navigation: any;

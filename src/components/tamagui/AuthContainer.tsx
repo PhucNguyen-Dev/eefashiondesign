@@ -11,7 +11,7 @@ interface AuthContainerProps {
   children: React.ReactNode;
   title: string;
   subtitle: string;
-  icon?: keyof typeof Ionicons.glyphMap;
+  icon?: string;
 }
 
 const Container = styled(Stack, {
@@ -73,7 +73,7 @@ const AuthContainer: React.FC<AuthContainerProps> = ({
           <ScrollContent>
             <Header>
               <IconContainer>
-                <Ionicons name={icon} size={60} color="#4A90E2" />
+                <Ionicons name={icon as any} size={60} color="#4A90E2" />
               </IconContainer>
               <Title>{title}</Title>
               <Subtitle>{subtitle}</Subtitle>

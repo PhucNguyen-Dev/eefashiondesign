@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
-import { Stack, Text, styled } from 'tamagui';
+import { Stack, Text, styled } from '@tamagui/core';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { THEME_COLORS } from '../../core/utils/constants';
-import { TamaguiColorPicker } from './ColorPicker';
-import { TamaguiPropertySlider } from './PropertySlider';
+import { THEME_COLORS } from '@infrastructure/config/constants';
+import TamaguiColorPicker from './ColorPicker';
+import TamaguiPropertySlider from './PropertySlider';
 
 interface RightSidebarProps {
   viewOrientation: string;
@@ -347,25 +347,25 @@ export const TamaguiRightSidebar: React.FC<RightSidebarProps> = ({
                 <TamaguiPropertySlider
                   label="Roughness"
                   value={materialProps.roughness}
-                  onValueChange={(value) => updateMaterialProp('roughness', value)}
+                  onValueChange={(value: number) => updateMaterialProp('roughness', value)}
                   icon="texture-box"
                 />
                 <TamaguiPropertySlider
                   label="Shininess"
                   value={materialProps.shininess}
-                  onValueChange={(value) => updateMaterialProp('shininess', value)}
+                  onValueChange={(value: number) => updateMaterialProp('shininess', value)}
                   icon="shimmer"
                 />
                 <TamaguiPropertySlider
                   label="Thickness"
                   value={materialProps.thickness}
-                  onValueChange={(value) => updateMaterialProp('thickness', value)}
+                  onValueChange={(value: number) => updateMaterialProp('thickness', value)}
                   icon="layers"
                 />
                 <TamaguiPropertySlider
                   label="Weight"
                   value={materialProps.weight}
-                  onValueChange={(value) => updateMaterialProp('weight', value)}
+                  onValueChange={(value: number) => updateMaterialProp('weight', value)}
                   icon="weight"
                 />
               </SectionContent>
@@ -403,3 +403,5 @@ export const TamaguiRightSidebar: React.FC<RightSidebarProps> = ({
     </Container>
   );
 };
+
+export default TamaguiRightSidebar;

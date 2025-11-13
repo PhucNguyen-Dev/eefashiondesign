@@ -27,3 +27,11 @@ export { TamaguiProfileScreen } from './ProfileScreen';
 export { TamaguiLeftSidebar } from './LeftSidebar';
 export { TamaguiRightSidebar } from './RightSidebar';
 export { TamaguiDesign3DAtelierScreen } from './Design3DAtelierScreen';
+export { default as HomeScreen } from './HomeScreen';
+export { default as AIAssistantScreen } from './AIAssistantScreen';
+export { default as MeasurementsScreen } from './MeasurementsScreen';
+export { default as CollaborationScreen } from './CollaborationScreen';
+
+// Glassmorphism and Interactive Effects
+export * from './GlassComponents';
+export * from './InteractiveEffects';

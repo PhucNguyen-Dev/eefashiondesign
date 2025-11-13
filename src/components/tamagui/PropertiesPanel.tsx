@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, ScrollView, Slider } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { styled, Stack } from '@tamagui/core';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text as TamaguiText } from './Text';
@@ -134,12 +135,12 @@ const PropertySliderComponent: React.FC<{
   onValueChange: (value: number) => void;
   min?: number;
   max?: number;
-  icon?: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon?: string;
 }> = ({ label, value, onValueChange, min = 0, max = 100, icon }) => (
   <PropertyItem>
     <PropertyHeader>
       <PropertyLabel>
-        {icon && <MaterialCommunityIcons name={icon} size={16} color="#888" />}
+        {icon && <MaterialCommunityIcons name={icon as any} size={16} color="#888" />}
         <PropertyLabelText>{label}</PropertyLabelText>
       </PropertyLabel>
       <PropertyValue>{Math.round(value)}</PropertyValue>

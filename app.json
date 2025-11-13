@@ -27,9 +27,8 @@
       "package": "com.eefashionita.app"
     },
     "web": {
-      "output": "static",
       "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "bundler": "webpack"
     },
     "plugins": [],
     "extra": {
@@ -37,6 +36,7 @@
         "projectId": "0e170ccd-cfa2-4677-a835-2b848a706977"
       }
     },
-    "owner": "edenemma"
+    "owner": "edenemma",
+    "scheme": "eefashionita"
   }
 }

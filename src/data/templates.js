@@ -99,7 +99,7 @@ export const templatesData = [
     name: 'Hoodie',
     category: 'shirts',
     description: 'Comfortable pullover hoodie with kangaroo pocket',
-    icon: 'hoodie',
+    icon: 'tshirt-crew',
     colors: ['#A8E6CF', '#98D6BF'],
     layers: 4,
     features: [
@@ -118,7 +118,7 @@ export const templatesData = [
     name: 'Pencil Skirt',
     category: 'skirts',
     description: 'Classic knee-length pencil skirt',
-    icon: 'skirt',
+    icon: 'hanger',
     colors: ['#C7CEEA', '#B7BEDA'],
     layers: 3,
     features: [

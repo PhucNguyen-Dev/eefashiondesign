@@ -12,7 +12,7 @@ interface PropertySliderProps {
   label: string;
   value: number;
   onValueChange: (value: number) => void;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: string;
   min?: number;
   max?: number;
 }
@@ -113,7 +113,7 @@ const PropertySlider: React.FC<PropertySliderProps> = ({
     <Container>
       <Header>
         <LabelContainer>
-          <MaterialCommunityIcons name={icon} size={16} color="#B0B0C0" />
+          <MaterialCommunityIcons name={icon as any} size={16} color="#B0B0C0" />
           <Label>{label}</Label>
         </LabelContainer>
         <Value>{Math.round(value * 100)}%</Value>

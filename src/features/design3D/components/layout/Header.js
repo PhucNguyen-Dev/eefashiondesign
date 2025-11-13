@@ -4,7 +4,7 @@
  * For new code, import directly from '@/components/tamagui'
  */
 import React from 'react';
-import Header3DTamagui from '../../../../components/tamagui/Header3D';
+import Header3DTamagui from '@components/tamagui/Header3D';
 
 const Header = ({ navigation }) => {
   return <Header3DTamagui navigation={navigation} />;

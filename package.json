@@ -13,6 +13,7 @@
     "@dotlottie/react-player": "^1.6.3",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/netinfo": "11.1.0",
+    "@react-native-community/slider": "^5.1.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
@@ -62,11 +63,15 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@expo/webpack-config": "^19.0.1",
+    "@react-navigation/native-stack": "^7.6.2",
     "@tamagui/babel-plugin": "^1.135.4",
     "@types/react": "~18.2.45",
     "@types/react-native": "^0.72.8",
+    "@types/react-navigation": "^3.4.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "react-native-dotenv": "^3.4.11",
     "stream-browserify": "^3.0.0",
     "typescript": "^5.9.3",
     "webpack-cli": "^6.0.1"

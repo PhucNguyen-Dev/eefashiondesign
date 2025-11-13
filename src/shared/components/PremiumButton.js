@@ -5,9 +5,11 @@
  */
 
 import React from 'react';
-import PremiumButtonTamagui from '../../../components/tamagui/PremiumButton';
+import PremiumButtonTamagui from '@components/tamagui/PremiumButton';
 
-  return <PremiumButtonTamagui />;
+const PremiumButton = (props) => {
+  return <PremiumButtonTamagui {...props} />;
+};
 
 export default PremiumButton;
 

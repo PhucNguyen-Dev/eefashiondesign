@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Animated, Dimensions, Modal, Platform, ScrollView as RNScrollView, Image } from 'react-native';
-import { Stack, Text, Button, styled, ScrollView, useTheme } from 'tamagui';
+import { Stack, Text, styled } from '@tamagui/core';
+import { Button } from './Button';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
@@ -118,7 +119,6 @@ const TemplateQuickPreview: React.FC<TemplateQuickPreviewProps> = ({
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const theme = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -307,7 +307,7 @@ const TemplateQuickPreview: React.FC<TemplateQuickPreviewProps> = ({
             </Stack>
 
             {/* Templates grid */}
-            <ScrollView flex={1} padding="$4">
+            <RNScrollView style={{ flex: 1, padding: 16 }}>
               <Stack flexDirection="row" flexWrap="wrap" justifyContent="space-between">
                 {filteredTemplates.map((template) => (
                   <TemplateCard
@@ -374,7 +374,7 @@ const TemplateQuickPreview: React.FC<TemplateQuickPreviewProps> = ({
                   </TemplateCard>
                 ))}
               </Stack>
-            </ScrollView>
+            </RNScrollView>
 
             {/* Footer with action buttons */}
             <Stack

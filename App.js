@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -49,18 +49,20 @@ import TutorialOverlay from "./src/shared/components/TutorialOverlay";
 // Import App Infrastructure
 import { ThemeProvider, useTheme } from "./src/context/ThemeContext";
 import { ThemeToggle } from "./src/components";
-import { useAppStore, useTutorialStore } from "./src/store";
+import { useAppStore, useTutorialStore } from "./src/state/appStore";
 import { AuthProvider, useAuth } from "./src/context/AuthContext"; // CORRECTED: Use the new AuthContext
 import performanceService from "./src/services/performanceService";
 
 // Import Core Utilities
-import { logPlatformInfo } from "./src/core/utils/platform";
+import { logPlatformInfo } from "./src/infrastructure/platform/detection";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 // Animated Tab Bar Icon Component
-const AnimatedTabIcon = ({ name, color, focused, IconComponent }) => {
+// PERFORMANCE FIX: Memoized component with stable animated values
+const AnimatedTabIcon = React.memo(({ name, color, focused, IconComponent }) => {
+  // PERFORMANCE FIX: Create animated values only once
   const scaleAnim = React.useRef(new Animated.Value(1)).current;
   const rotateAnim = React.useRef(new Animated.Value(0)).current;
 
@@ -96,12 +98,12 @@ const AnimatedTabIcon = ({ name, color, focused, IconComponent }) => {
         }),
       ]).start();
     }
-  }, [focused]);
+  }, [focused]); // PERFORMANCE FIX: Removed scaleAnim and rotateAnim from dependencies
 
-  const spin = rotateAnim.interpolate({
+  const spin = useMemo(() => rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "360deg"],
-  });
+  }), [rotateAnim]); // PERFORMANCE FIX: Memoized interpolation
 
   return (
     <Animated.View
@@ -112,7 +114,7 @@ const AnimatedTabIcon = ({ name, color, focused, IconComponent }) => {
       <IconComponent name={name} size={24} color={color} />
     </Animated.View>
   );
-};
+});
 
 AnimatedTabIcon.propTypes = {
   name: PropTypes.string.isRequired,

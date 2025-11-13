@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { STORAGE_KEYS } from '../config/constants';
+import { STORAGE_KEYS } from '@infrastructure/config/constants';
 
 /**
  * Color History Service

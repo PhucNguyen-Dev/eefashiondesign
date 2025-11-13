@@ -14,14 +14,14 @@ interface MobileFallbackProps {
 }
 
 interface Feature {
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: string;
   title: string;
   description: string;
 }
 
 interface Alternative {
   id: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  icon: string;
   title: string;
   description: string;
   color: string;

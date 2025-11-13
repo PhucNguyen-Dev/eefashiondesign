@@ -6,6 +6,7 @@
 import React from 'react';
 import ToolbarTamagui from '../tamagui/Toolbar';
 
+const Toolbar = ({ selectedTool, onToolSelect, onUndo, onRedo, canUndo, canRedo }) => {
   return (
     <ToolbarTamagui
       selectedTool={selectedTool}

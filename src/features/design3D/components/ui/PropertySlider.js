@@ -4,8 +4,9 @@
  * For new code, import directly from '@/components/tamagui'
  */
 import React from 'react';
-import PropertySliderTamagui from '../../../../components/tamagui/PropertySlider';
+import PropertySliderTamagui from '@components/tamagui/PropertySlider';
 
+const PropertySlider = ({ label, value, onValueChange, icon, min, max }) => {
   return (
     <PropertySliderTamagui
       label={label}

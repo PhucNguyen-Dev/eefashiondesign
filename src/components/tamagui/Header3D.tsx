@@ -17,7 +17,7 @@ interface Header3DProps {
 interface Tab {
   id: string;
   label: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: string;
   active?: boolean;
 }
 

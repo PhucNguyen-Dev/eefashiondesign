@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Modal, ScrollView, TouchableOpacity } from 'react-native';
 import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from '@expo/vector-icons';
-import { FEATURES } from '../../core/config/features.config';
+import { FEATURES } from '@infrastructure/config/features.config';
 import { Text as TamaguiText } from './Text';
 
 // Define XStack and YStack
@@ -15,7 +15,7 @@ const XStack = styled(Stack, { flexDirection: 'row' });
 const YStack = styled(Stack, { flexDirection: 'column' });
 
 interface FeatureItemProps {
-  icon: keyof typeof Ionicons.glyphMap;
+  icon: string;
   title: string;
   description: string;
 }

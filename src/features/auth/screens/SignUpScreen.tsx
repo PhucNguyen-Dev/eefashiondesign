@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { styled, Stack } from '@tamagui/core';
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../../../core/state/hooks/useAuth";
+import { useAuth } from "@infrastructure/auth/useAuth";
 import { AuthContainer, AuthInput, Button, ButtonText, Text as TamaguiText } from '../../../components/tamagui';
 
 // Define XStack and YStack

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { styled, Stack } from '@tamagui/core';
-import Svg, { Circle, Rect, Line, Path, Pattern, Defs } from 'react-native-svg';
+import Svg, { Circle, Rect, Line, Path, Pattern as SvgPattern, Defs as SvgDefs } from 'react-native-svg';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text as TamaguiText } from './Text';
 
@@ -9,15 +9,15 @@ import { Text as TamaguiText } from './Text';
 const XStack = styled(Stack, { flexDirection: 'row' });
 const YStack = styled(Stack, { flexDirection: 'column' });
 
-interface Pattern {
+interface PatternType {
   id: string;
   name: string;
   type: string;
 }
 
 interface PatternSelectorProps {
-  selectedPattern?: Pattern | null;
-  onPatternSelect: (pattern: Pattern) => void;
+  selectedPattern?: PatternType | null;
+  onPatternSelect: (pattern: PatternType) => void;
 }
 
 const Container = styled(YStack, {
@@ -108,34 +108,34 @@ const renderPattern = (pattern: Pattern) => {
     case 'lines':
       return (
         <Svg width={size} height={size}>
-          <Defs>
-            <Pattern id="stripes" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <SvgDefs>
+            <SvgPattern id="stripes" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
               <Line x1="0" y1="0" x2="0" y2="10" stroke="#6C63FF" strokeWidth="2" />
-            </Pattern>
-          </Defs>
+            </SvgPattern>
+          </SvgDefs>
           <Rect x="0" y="0" width={size} height={size} fill="url(#stripes)" />
         </Svg>
       );
     case 'circles':
       return (
         <Svg width={size} height={size}>
-          <Defs>
-            <Pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+          <SvgDefs>
+            <SvgPattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
               <Circle cx="10" cy="10" r="3" fill="#FF6B6B" />
-            </Pattern>
-          </Defs>
+            </SvgPattern>
+          </SvgDefs>
           <Rect x="0" y="0" width={size} height={size} fill="url(#dots)" />
         </Svg>
       );
     case 'squares':
       return (
         <Svg width={size} height={size}>
-          <Defs>
-            <Pattern id="checkers" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+          <SvgDefs>
+            <SvgPattern id="checkers" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
               <Rect x="0" y="0" width="10" height="10" fill="#4ECDC4" />
               <Rect x="10" y="10" width="10" height="10" fill="#4ECDC4" />
-            </Pattern>
-          </Defs>
+            </SvgPattern>
+          </SvgDefs>
           <Rect x="0" y="0" width={size} height={size} fill="url(#checkers)" />
         </Svg>
       );
@@ -181,7 +181,7 @@ const renderPattern = (pattern: Pattern) => {
 const PatternSelector: React.FC<PatternSelectorProps> = ({ selectedPattern, onPatternSelect }) => {
   const [selectedCategory, setSelectedCategory] = useState<'geometric' | 'floral' | 'abstract'>('geometric');
 
-  const patterns: Record<string, Pattern[]> = {
+  const patterns: Record<string, PatternType[]> = {
     geometric: [
       { id: 'stripes', name: 'Stripes', type: 'lines' },
       { id: 'dots', name: 'Polka Dots', type: 'circles' },

@@ -4,7 +4,7 @@
  * For new code, import directly from '@/components/tamagui'
  */
 import React from 'react';
-import MobileFallbackTamagui from '../../../../components/tamagui/MobileFallback';
+import MobileFallbackTamagui from '@components/tamagui/MobileFallback';
 
 const MobileFallback = ({ navigation }) => {
   return <MobileFallbackTamagui navigation={navigation} />;

@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AUTO_SAVE, STORAGE_KEYS } from '../config/constants';
+import { AUTO_SAVE, STORAGE_KEYS } from '@infrastructure/config/constants';
 import { generateId } from '../utils/helpers';
 import errorHandler from './errorHandler';
-import { useDesignStore } from '../store';
 
 /**
  * Auto-Save Service
+ * Note: This service no longer imports store directly to avoid circular dependencies.
+ * Pass designStore as a parameter when calling methods.
  */
 class AutoSaveService {
   constructor() {
@@ -19,8 +20,11 @@ class AutoSaveService {
 
   /**
    * Start auto-save
+   * @param {string} designId - The design ID
+   * @param {Function} getCurrentDesign - Function to get current design state
+   * @param {Object} designStore - The design store instance (optional for backward compatibility)
    */
-  start(designId, getCurrentDesign) {
+  start(designId, getCurrentDesign, designStore = null) {
     if (!this.isEnabled) return;
 
     this.stop(); // Clear any existing timer
@@ -28,10 +32,11 @@ class AutoSaveService {
     // Store references for manual save()
     this.currentDesignId = designId;
     this.getCurrentDesign = getCurrentDesign;
+    this.designStore = designStore;
 
     this.saveTimer = setInterval(() => {
       if (this.pendingChanges) {
-        this.saveVersion(designId, getCurrentDesign());
+        this.saveVersion(designId, getCurrentDesign(), this.designStore);
       }
     }, this.saveInterval);
 
@@ -70,13 +75,16 @@ class AutoSaveService {
     }
 
     // Force save regardless of pendingChanges state
-    return await this.saveVersion(this.currentDesignId, this.getCurrentDesign());
+    return await this.saveVersion(this.currentDesignId, this.getCurrentDesign(), this.designStore);
   }
 
   /**
    * Save current version
+   * @param {string} designId - The design ID
+   * @param {Object} designData - The design data to save
+   * @param {Object} designStore - The design store instance (pass from component)
    */
-  async saveVersion(designId, designData) {
+  async saveVersion(designId, designData, designStore = null) {
     try {
       const version = {
         id: generateId(),
@@ -101,9 +109,10 @@ class AutoSaveService {
         JSON.stringify(trimmedVersions)
       );
 
-      // Update store
-      const designStore = useDesignStore.getState();
-      designStore.saveVersion(designId, version);
+      // Update store if provided
+      if (designStore) {
+        designStore.saveVersion(designId, version);
+      }
 
       this.lastSaveTime = new Date();
       this.pendingChanges = false;
