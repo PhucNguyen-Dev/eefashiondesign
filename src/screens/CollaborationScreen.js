@@ -1,9 +1,7 @@
-import CollaborationScreen from '../components/tamagui/CollaborationScreen';import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
-
-export default CollaborationScreen;  View,
-
+  View,
   Text,
   StyleSheet,
   ScrollView,

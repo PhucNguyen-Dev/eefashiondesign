@@ -1,3 +1,6 @@
+// Polyfill for React 18.2.0 compatibility
+import './polyfills';
+
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   StyleSheet,

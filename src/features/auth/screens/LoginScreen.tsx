@@ -140,9 +140,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     console.log('Login result:', result);
 
-    if (result.success) {
+    if (result.success && 'user' in result) {
       console.log('Login successful! User:', result.user);
-    } else {
+    } else if ('error' in result) {
       console.error('Login failed:', result.error);
       if (Platform.OS !== "web") {
         Alert.alert("Login Failed", result.error || "Invalid email or password");

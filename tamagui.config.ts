@@ -1,4 +1,5 @@
 import { config } from '@tamagui/config/v3'
+// @ts-expect-error - createTamagui is exported but TypeScript definition is incorrect
 import { createTamagui } from '@tamagui/core'
 
 // Custom theme colors matching the app's design

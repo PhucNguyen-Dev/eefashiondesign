@@ -101,7 +101,7 @@ const SelectedIndicator = styled(YStack, {
   right: 8,
 });
 
-const renderPattern = (pattern: Pattern) => {
+const renderPattern = (pattern: PatternType) => {
   const size = 80;
   
   switch (pattern.type) {

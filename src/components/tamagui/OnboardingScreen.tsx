@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Animated, Dimensions, FlatList } from 'react-native';
-import { Stack, Text, Button, styled, useTheme } from 'tamagui';
+import { Stack, Text, Button, styled } from '@tamagui/core';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppStore } from '@state/appStore';
@@ -102,7 +102,6 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef<FlatList>(null);
   const { setOnboardingCompleted } = useAppStore();
-  const theme = useTheme();
 
   const viewableItemsChanged = useRef(({ viewableItems }: any) => {
     setCurrentIndex(viewableItems[0]?.index || 0);

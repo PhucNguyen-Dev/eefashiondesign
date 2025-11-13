@@ -32,7 +32,7 @@ import DesignTips from '../../../../components/DesignTips.js';
 import { useDesignStore } from '@state/appStore';
 import exportService from '../../../../services/exportService.js';
 import autoSaveService from '../../../../services/autoSaveService.js';
-import useKeyboardShortcuts, { COMMON_SHORTCUTS } from '../../../../hooks/useKeyboardShortcuts.js';
+import useKeyboardShortcuts, { COMMON_SHORTCUTS } from '../../../../hooks/useKeyboardShortcuts';
 
 // Import types
 import type {
@@ -50,7 +50,7 @@ import type {
   LayerItemProps,
   DesignElementProps,
   DesignStudioScreenProps,
-} from './types.js';
+} from './types';
 
 const { width, height } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 40;
@@ -327,22 +327,24 @@ const DesignStudioScreen: React.FC<DesignStudioScreenProps> = ({ navigation }) =
 
   const handleUndo = (): void => {
     if (canUndo()) {
-      const previousState = undo();
-      if (previousState) {
-        setDesignElements((previousState as DesignData).designElements || []);
-        setPaths((previousState as DesignData).paths || []);
-        setLayers((previousState as DesignData).layers || []);
+      undo();
+      const currentState = designStore.currentDesign;
+      if (currentState) {
+        setDesignElements((currentState as unknown as DesignData).designElements || []);
+        setPaths((currentState as unknown as DesignData).paths || []);
+        setLayers((currentState as unknown as DesignData).layers || []);
       }
     }
   };
 
   const handleRedo = (): void => {
     if (canRedo()) {
-      const nextState = redo();
-      if (nextState) {
-        setDesignElements((nextState as DesignData).designElements || []);
-        setPaths((nextState as DesignData).paths || []);
-        setLayers((nextState as DesignData).layers || []);
+      redo();
+      const currentState = designStore.currentDesign;
+      if (currentState) {
+        setDesignElements((currentState as unknown as DesignData).designElements || []);
+        setPaths((currentState as unknown as DesignData).paths || []);
+        setLayers((currentState as unknown as DesignData).layers || []);
       }
     }
   };

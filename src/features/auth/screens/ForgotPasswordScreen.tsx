@@ -105,9 +105,9 @@ const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({ navigation 
 
     const result = await resetPassword(email);
     
-    if (result.success) {
+    if (result.success && 'message' in result) {
       setEmailSent(true);
-    } else {
+    } else if ('error' in result) {
       Alert.alert('Reset Failed', result.error || 'An error occurred while resetting your password');
     }
   };

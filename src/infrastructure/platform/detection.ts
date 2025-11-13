@@ -96,7 +96,7 @@ export const getPerformanceTier = () => {
   if (isWeb) {
     // Simple heuristic based on hardware concurrency
     const cores = navigator.hardwareConcurrency || 2;
-    const memory = navigator.deviceMemory || 4;
+    const memory = (navigator as any).deviceMemory || 4;
     
     if (cores >= 8 && memory >= 8) return 'high';
     if (cores >= 4 && memory >= 4) return 'medium';
@@ -135,7 +135,7 @@ export const BREAKPOINTS = {
   wide: 1440,
 };
 
-export const isBreakpoint = (breakpoint) => {
+export const isBreakpoint = (breakpoint: keyof typeof BREAKPOINTS) => {
   const width = getScreenWidth();
   return width >= BREAKPOINTS[breakpoint];
 };
@@ -143,7 +143,7 @@ export const isBreakpoint = (breakpoint) => {
 /**
  * Platform-specific values
  */
-export const platformSelect = (values) => {
+export const platformSelect = (values: any) => {
   return Platform.select(values);
 };
 
@@ -151,7 +151,7 @@ export const platformSelect = (values) => {
  * Get platform-specific component
  * Automatically loads .web.js or .native.js based on platform
  */
-export const getPlatformComponent = (componentName) => {
+export const getPlatformComponent = (componentName: string) => {
   // React Native's Metro bundler handles this automatically
   // Just import the component without extension
   return componentName;
@@ -160,8 +160,8 @@ export const getPlatformComponent = (componentName) => {
 /**
  * Check if feature is available on current platform
  */
-export const isFeatureAvailable = (feature) => {
-  const featureMap = {
+export const isFeatureAvailable = (feature: string) => {
+  const featureMap: { [key: string]: boolean } = {
     '3d': supports3D(),
     'webgl': supportsWebGL(),
     'webgl2': supportsWebGL2(),

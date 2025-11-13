@@ -139,7 +139,6 @@ const AuthInput: React.FC<AuthInputProps> = ({
             flex: 1,
             fontSize: 16,
             color: '#FFFFFF',
-            outlineStyle: 'none' as any
           }}
           placeholder={placeholder}
           placeholderTextColor="#B0B0C0"
