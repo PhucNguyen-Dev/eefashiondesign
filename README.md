@@ -1,188 +1,147 @@
-# 🎨 eefashionita - 3D Fashion Design Atelier
+# 🎨 eefashionita — 3D Fashion Design Atelier
 
-**A cross-platform 3D fashion design application with real-time collaboration, AR visualization, and advanced material editing.**
+**A cross-platform 3D fashion-design application built with React Native + Expo + TypeScript.** Full 3D canvas on web/desktop, graceful fallback on tablet and mobile.
 
 ---
 
 ## 🌟 Overview
 
-eefashionita is a modern fashion design platform that brings professional 3D garment design tools to web, desktop, and mobile devices. Built with React Native and Expo, it features a powerful 3D design interface (web/desktop) with graceful fallbacks for mobile devices.
+eefashionita brings 3D garment design to web, desktop, tablet, and mobile. The design canvas runs on React Three Fiber / Three.js on the surfaces that support WebGL well, with platform-specific degradation elsewhere.
 
-### Key Features
+### Features
 
-- **🎨 3D Design Atelier** - Full 3D garment design with real-time material editing (web/desktop)
-- **📱 Cross-Platform** - Works on web, desktop, tablet, and mobile
-- **🤝 Real-Time Collaboration** - Work together with team members
-- **🎭 AR Try-On** - Augmented reality garment visualization
-- **🎯 Material System** - Advanced fabric materials (denim, cotton, leather, silk)
-- **⚡ Performance Optimized** - Smart loading and platform-specific features
-- **🔄 Auto-Save** - Never lose your work
+- **🎨 3D Design Atelier** — 3D garment canvas with material editing (web/desktop)
+- **📱 Cross-platform** — Expo 50, same codebase across web, desktop, tablet, mobile
+- **🧩 Feature-first architecture** — `core` / `features` / `shared` / `navigation` split, see below
+- **⚡ Platform-aware** — smart feature gating so mobile/tablet degrade cleanly
+- **🔄 Auto-save** — local persistence via AsyncStorage + expo-file-system
+
+### Status
+
+**Shipped:** project structure, core utilities, platform detection, Zustand store, Supabase client scaffold, feature-folder layout, 3D canvas mount point, CI to CDN.
+
+**On roadmap:** backend API integration, real-time collaboration, physics simulation, material library expansion, multi-format export, cloud storage, user auth flow, template marketplace. Auth and AR exist as feature-folder skeletons, not yet implemented.
+
+This is a personal portfolio project — a case study for cross-platform 3D app architecture with React Native + Three.js + Supabase + Zustand. Not a production deployment.
 
 ---
 
 ## 🏗️ Architecture
 
-### Project Structure
+### Project structure
 
 ```
 eefashionita/
 ├── src/
-│   ├── core/                  # Business logic & utilities
-│   │   ├── state/             # State management (Zustand)
+│   ├── core/                  # business logic & utilities
+│   │   ├── state/             # Zustand store
 │   │   ├── services/          # API, storage, export services
-│   │   └── utils/             # Platform detection, constants, performance
+│   │   └── utils/             # platform detection, constants, performance
 │   │
-│   ├── features/              # Feature modules
+│   ├── features/              # one folder per vertical slice
 │   │   ├── design3D/          # 3D Atelier (main feature)
 │   │   ├── design2D/          # 2D design tools
-│   │   ├── ar/                # AR features
-│   │   ├── home/              # Home screen
-│   │   └── auth/              # Authentication
+│   │   ├── ar/                # AR features (stub)
+│   │   ├── home/              # home screen
+│   │   └── auth/              # authentication (stub)
 │   │
-│   ├── shared/                # Shared components & assets
-│   │   ├── components/        # Reusable UI components
-│   │   ├── hooks/             # Custom React hooks
-│   │   ├── assets/            # Images, models, textures
-│   │   └── styles/            # Shared styles
+│   ├── shared/                # cross-cutting UI layer
+│   │   ├── components/        # reusable UI components
+│   │   ├── hooks/             # custom React hooks
+│   │   ├── assets/            # images, models, textures
+│   │   └── styles/            # shared styles
 │   │
-│   └── navigation/            # App navigation
+│   └── navigation/            # app navigation graph
 │
-├── docs/                      # Documentation
-│   └── ARCHITECTURE.md        # Detailed architecture guide
-│
-└── App.js                     # App entry point
+├── docs/                      # documentation
+├── android/                   # committed Android scaffold (Expo)
+└── App.js                     # app entry point
 ```
 
-### Technology Stack
+The split is intentional: `core` is the substrate (state, services, utilities), `features` owns its own screens + hooks + components per domain, `shared` is the cross-cutting UI layer. Adding a new domain means a new folder under `features/` plus a router entry — no changes to `core`.
 
-**Core:**
-- React Native + Expo
-- React Navigation
-- React Native Paper (UI)
-- Zustand (State Management)
+### Technology stack
 
-**3D Features (Web/Desktop Only):**
-- React Three Fiber
-- @react-three/drei
-- Three.js
+**Shell**
+- Expo 50, React 18.2, React Native 0.73
+- Tamagui 1.135 (UI + theme system)
+- React Navigation (stack + bottom tabs)
+- Zustand 4 (state)
 
-**Platform Support:**
-- ✅ Web (full features)
-- ✅ Desktop (full features)
-- ⚠️ Tablet (limited 3D)
-- ⚠️ Mobile (view-only 3D)
+**3D (web/desktop only)**
+- Three.js 0.160, @react-three/fiber 8.15, @react-three/drei 9.95
+
+**Data + persistence**
+- Supabase (`@supabase/supabase-js` 2.75) — auth + data scaffold
+- @react-native-async-storage/async-storage for local state
+- expo-file-system + expo-sharing for exports
+
+**AR + media primitives** (wired, not yet full flows)
+- expo-camera, expo-gl, expo-image-picker, expo-media-library
+
+### Platform support
+
+- ✅ Web — full 3D, all features
+- ✅ Desktop — full 3D, all features
+- ⚠️ Tablet — limited 3D (feature-gated)
+- ⚠️ Mobile — view-only 3D, no editing
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting started
 
 ### Prerequisites
 
-- **Node.js** v16+ ([Download](https://nodejs.org/))
-- **npm** or **yarn**
-- **Expo CLI** (optional, for mobile development)
+- Node.js v18+
+- npm or pnpm
+- Expo CLI (optional, for mobile development)
 
-### Installation
+### Install & run
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/eefashionita.git
-   cd eefashionita
-   ```
+```bash
+git clone https://github.com/PhucNguyen-Dev/eefashiondesign.git
+cd eefashiondesign
+npm install
+npm start
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+Platform targets:
 
-3. **Start the development server:**
-   ```bash
-   npm start
-   ```
+```bash
+npm run web      # web browser (full 3D)
+npm run android  # Android emulator
+npm run ios      # iOS simulator (Mac only)
+npm run build:web  # production web export (CI target)
+```
 
-4. **Run on specific platform:**
-   ```bash
-   npm run web      # Web browser
-   npm run ios      # iOS simulator (Mac only)
-   npm run android  # Android emulator
-   ```
+> `npm install` runs a `postinstall` step (`node patch-tamagui.js`) — keep that script around or the Tamagui build will break.
 
-### Quick Start
+### Quick start
 
-1. Open the app in your browser (web) or device
+1. Open the app in a browser (web) or device
 2. Navigate to **3D Atelier** from the home screen
-3. Select a garment type (jumpsuit, dress, etc.)
+3. Select a garment type
 4. Use the tools panel to edit materials and colors
 5. Adjust properties in the right sidebar
-6. Click **Simulate** to see fabric physics
-7. Export your design when ready
-
----
-
-## 📱 Platform-Specific Features
-
-### Web & Desktop (Full Features)
-- ✅ Full 3D viewport with WebGL
-- ✅ Real-time material editing
-- ✅ Physics simulation
-- ✅ Advanced rendering
-- ✅ Export to multiple formats
-
-### Tablet (Limited Features)
-- ⚠️ Basic 3D viewing
-- ⚠️ Material preview
-- ✅ Project management
-- ✅ Collaboration
-
-### Mobile (View-Only)
-- ❌ 3D editing (fallback UI shown)
-- ✅ View saved projects
-- ✅ Collaboration
-- ✅ AR try-on
-
----
-
-## 🎨 3D Atelier Features
-
-### Design Tools
-- **Material Editor** - Change fabric types and textures
-- **Color Picker** - Advanced color selection with HSV
-- **Pattern Tools** - Apply patterns and designs
-- **Drawing Tools** - Freehand drawing on garments
-- **Text Tools** - Add text and labels
-
-### Advanced Tools
-- **Lighting Control** - Adjust scene lighting
-- **Seam Editor** - Modify garment seams
-- **Measurements** - Precise garment measurements
-- **Pleating** - Add pleats and folds
-- **UV Mapping** - Advanced texture mapping
-- **Pose Editor** - Change mannequin poses
-
-### Properties Panel
-- **View Orientation** - Front, back, side, top, walking
-- **Material Properties** - Roughness, shininess, thickness
-- **Physics Settings** - Wind, gravity, stiffness
-- **Render Settings** - Quality, resolution, format
+6. Export your design when ready
 
 ---
 
 ## 🔧 Development
 
-### Project Commands
+### Project commands
 
 ```bash
-npm start          # Start Expo dev server
-npm run web        # Run on web
-npm run ios        # Run on iOS
-npm run android    # Run on Android
-npm test           # Run tests
-npm run lint       # Lint code
+npm start          # Expo dev server
+npm run web        # web
+npm run ios        # iOS
+npm run android    # Android
+npm run build:web  # production web export
 ```
 
-### Environment Variables
+### Environment variables
 
-Create a `.env` file in the root:
+Create `.env` at the root:
 
 ```env
 REACT_APP_API_URL=https://api.3datelier.com
@@ -190,118 +149,79 @@ REACT_APP_WS_URL=wss://api.3datelier.com/ws
 REACT_APP_CDN_URL=https://cdn.3datelier.com
 ```
 
-### Adding New Features
+> Those URLs are placeholders from the initial scaffold — the backend API integration is still on the roadmap. The Supabase client in `src/core/services` is the real data path until then.
 
-1. Create feature folder in `src/features/`
-2. Add components, hooks, and screens
-3. Export from `index.js`
-4. Add to navigation
+### Adding a new feature
 
-Example:
-```javascript
-// src/features/myFeature/index.js
-export { default as MyFeatureScreen } from './screens/MyFeatureScreen';
-```
+1. Create a folder under `src/features/`
+2. Add `screens/`, `hooks/`, `components/` inside it
+3. Export from `src/features/<name>/index.js`
+4. Register the route in `src/navigation/`
 
 ---
 
 ## 📚 Documentation
 
-- **[Architecture Guide](docs/ARCHITECTURE.md)** - Detailed architecture documentation
-- **[API Integration](docs/API_INTEGRATION.md)** - Backend API integration guide (coming soon)
-- **[3D Setup](docs/3D_SETUP.md)** - 3D engine setup guide (coming soon)
-- **[Performance](docs/PERFORMANCE.md)** - Performance optimization guide (coming soon)
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** — detailed architecture guide
+- Sprint-tracking docs in the root: `CURRENT_STRUCTURE.md`, `DEPENDENCY_ANALYSIS.md`, `FIXES_SUMMARY.md`, `MIGRATION_MAPPING.md`, `MIGRATION_PRIORITY.md`, `PHASE1_COMPLETE.md`, `WEEK1_COMPLETE.md`, `WEEK1_TESTING_REPORT.md`, `WEEK2_3_INFRASTRUCTURE_COMPLETE.md`, `WORKING_FEATURES.md`, `UI_UX_ENHANCEMENTS_SUMMARY.md`
+
+Several of those were written between sprint phases during the initial build — they show how the project evolved over the two-week initial push.
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
+1. Fork the repo
+2. `git checkout -b feature/<name>`
+3. `git commit -m "feat: …"` (Conventional Commits)
+4. `git push -u origin feature/<name>`
+5. Open a PR
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Style
-
-- Use ESLint and Prettier
-- Follow React Native best practices
-- Write meaningful commit messages
-- Add tests for new features
+Style: ESLint + Prettier, follow React Native conventions, add tests for new features.
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Common Issues
-
 **App won't start:**
 ```bash
-# Clear cache and reinstall
 rm -rf node_modules
 npm install
 npm start -- --clear
 ```
 
 **3D features not working:**
-- Check if you're on web/desktop
-- Verify WebGL support in browser
-- Check console for errors
+- Confirm you're on web or desktop
+- Verify WebGL support in the browser
+- Check the console for Three.js errors
 
 **Performance issues:**
 - Reduce render quality in settings
-- Close other applications
+- Close other GPU-heavy apps
 - Check device performance tier
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **React Native Team** - For the amazing framework
-- **Expo Team** - For simplifying mobile development
-- **Three.js Community** - For 3D rendering capabilities
-- **Fashion Designers** - For inspiration and feedback
+- **React Native + Expo teams** — for the framework
+- **Three.js + React Three Fiber community** — for 3D rendering
+- **Tamagui, Zustand, Supabase** — for the state/data/UI stack
 
 ---
 
 ## 📞 Contact
 
-- **Project Lead:** [Your Name]
-- **Email:** contact@eefashionita.com
-- **Website:** https://eefashionita.com
-- **Discord:** [Join our community](https://discord.gg/eefashionita)
+- **Author:** Nguyen Phuc Nguyen
+- **GitHub:** github.com/PhucNguyen-Dev
+- **Email:** nguyen.phuc.nguyen.dev@gmail.com
 
 ---
 
-## 🗺️ Roadmap
-
-### Current Version (v1.0.0)
-- ✅ Project restructure
-- ✅ Core utilities
-- ✅ Platform detection
-- ⏳ 3D Atelier UI (in progress)
-
-### Upcoming Features
-- 🔜 Backend API integration
-- 🔜 Real-time collaboration
-- 🔜 Physics simulation
-- 🔜 Material library expansion
-- 🔜 Export to multiple formats
-- 🔜 Cloud storage
-- 🔜 User authentication
-- 🔜 Template marketplace
-
----
-
-**Made with ❤️ by the eefashionita team**
-
-*Last updated: 2025-10-11*
-
+**Last updated: 2026-09-18**
